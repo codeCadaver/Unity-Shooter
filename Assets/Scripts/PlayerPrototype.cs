@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerPrototype : MonoBehaviour
 {
+
     public static Action<Vector2> OnPlayerMoved;
     
     [SerializeField] private float _movementSpeed = 5f;
@@ -13,19 +14,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject _laser;
     [SerializeField] private Transform _laserOffset;
     [SerializeField] private float _cooldownDelay = 0.5f;
-    [SerializeField] private float _shakeAnimDelay = 1f;
 
-    private Animator _anim;
     private bool _canFire = true;
-    private int _coolDownHash = Animator.StringToHash("ShakeTrigger");
     private float _lastFired = 0f;
     private Vector3 _newPosition;
     
     // Start is called before the first frame update
     void Start()
     {
-        _anim = GetComponent<Animator>();
-        StartCoroutine(OnCooldownRoutine());
+        
     }
 
     // Update is called once per frame
@@ -43,9 +40,9 @@ public class PlayerMovement : MonoBehaviour
         
         OnPlayerMoved?.Invoke(movement);
         
-        transform.Translate(movement * (Time.deltaTime * _movementSpeed));
+        transform.parent.Translate(movement * (Time.deltaTime * _movementSpeed));
         
-        _newPosition = transform.position;
+        _newPosition = transform.parent.position;
         
         ClampVert();
         ClampHoriz();
@@ -72,17 +69,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void ClampVert()
     {
-        if (transform.position.y > _maxY)
+        if (transform.parent.position.y > _maxY)
         {
             _newPosition.y = _maxY;
         }
 
-        if (transform.position.y < _minY)
+        if (transform.parent.position.y < _minY)
         {
             _newPosition.y = _minY;
         } 
         
-        transform.position = _newPosition;
+        transform.parent.position = _newPosition;
     }
 
     private void ClampHoriz()
@@ -120,9 +117,8 @@ public class PlayerMovement : MonoBehaviour
         ExplodeUnity.OnExploded += DisableLaser;
     }
 
-    private IEnumerator OnCooldownRoutine()
+    private void OnTriggerEnter(Collider other)
     {
-        yield return new WaitForSeconds(_shakeAnimDelay);
-        _anim.SetTrigger(_coolDownHash);
+        Debug.Log($"Collided with: {other.name}");
     }
 }

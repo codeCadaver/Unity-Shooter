@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Dissolver
   - NotDissolver
+  - Laser
+  - Enemy
   layers:
   - Default
   - TransparentFX
