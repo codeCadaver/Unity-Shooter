@@ -109,6 +109,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
-  _screenTopY: 0
-  _screenBottomY: 0
-  _randomX: 0
+  _screenTopY: 7
+  _screenBottomY: -7
+  _randomX: 9

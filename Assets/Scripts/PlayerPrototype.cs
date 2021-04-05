@@ -8,12 +8,14 @@ public class PlayerPrototype : MonoBehaviour
 
     public static Action<Vector2> OnPlayerMoved;
     
-    [SerializeField] private float _movementSpeed = 5f;
-    [SerializeField] private float _xWrap,_xClamp, _minY, _maxY;
     [SerializeField] private bool _canWrap = false;
-    [SerializeField] private GameObject _laser;
-    [SerializeField] private Transform _laserOffset;
+    [SerializeField] private float _movementSpeed = 5f;
+    [SerializeField] private float _tilt = 20f;
+    [SerializeField] private float _xWrap,_xClamp, _minY, _maxY;
     [SerializeField] private float _cooldownDelay = 0.5f;
+    [SerializeField] private GameObject _laser;
+    [SerializeField] private int _lives = 3;
+    [SerializeField] private Transform _laserOffset;
 
     private bool _canFire = true;
     private float _lastFired = 0f;
@@ -41,7 +43,7 @@ public class PlayerPrototype : MonoBehaviour
         OnPlayerMoved?.Invoke(movement);
         
         transform.parent.Translate(movement * (Time.deltaTime * _movementSpeed));
-        
+        transform.rotation *= Quaternion.AngleAxis(_tilt * right, new Vector3(0, 1 * right, 0));
         _newPosition = transform.parent.position;
         
         ClampVert();
@@ -121,4 +123,18 @@ public class PlayerPrototype : MonoBehaviour
     {
         Debug.Log($"Collided with: {other.name}");
     }
+
+    public void DamagePlayer()
+    {
+        _lives--;
+
+        if (_lives <= 0)
+        {
+            SpawnManager spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+            spawnManager.StopSpawning();
+            
+            Destroy(this.gameObject);
+        }
+    }
+
 }

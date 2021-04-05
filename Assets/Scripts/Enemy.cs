@@ -41,6 +41,16 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            PlayerPrototype player = other.GetComponent<PlayerPrototype>();
+            if (player != null)
+            {
+                player.DamagePlayer();
+            }
+            else
+            {
+                Debug.LogError("PlayerPrototype = null");
+            }
+            
             Destroy(this.gameObject);
         }
 
