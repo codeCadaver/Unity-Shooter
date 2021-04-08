@@ -7,7 +7,10 @@ public class PlayerPrototype : MonoBehaviour
 {
 
     public static Action<Vector2> OnPlayerMoved;
-    
+
+    public bool _is3D = false;
+
+    [SerializeField] private Transform _playerTransform;
     [SerializeField] private bool _canWrap = false;
     [SerializeField] private float _movementSpeed = 5f;
     [SerializeField] private float _tilt = 20f;
@@ -42,9 +45,9 @@ public class PlayerPrototype : MonoBehaviour
         
         OnPlayerMoved?.Invoke(movement);
         
-        transform.parent.Translate(movement * (Time.deltaTime * _movementSpeed));
-        transform.rotation *= Quaternion.AngleAxis(_tilt * right, new Vector3(0, 1 * right, 0));
-        _newPosition = transform.parent.position;
+        _playerTransform.Translate(movement * (Time.deltaTime * _movementSpeed));
+        // transform.rotation *= Quaternion.AngleAxis(_tilt * right, new Vector3(0, 1 * right, 0));
+        _newPosition = _playerTransform.position;
         
         ClampVert();
         ClampHoriz();
@@ -71,47 +74,47 @@ public class PlayerPrototype : MonoBehaviour
 
     private void ClampVert()
     {
-        if (transform.parent.position.y > _maxY)
+        if (_playerTransform.position.y > _maxY)
         {
             _newPosition.y = _maxY;
         }
 
-        if (transform.parent.position.y < _minY)
+        if (_playerTransform.position.y < _minY)
         {
             _newPosition.y = _minY;
         } 
         
-        transform.parent.position = _newPosition;
+        _playerTransform.position = _newPosition;
     }
 
     private void ClampHoriz()
     {
         if (_canWrap)
         {
-            if (transform.position.x > _xWrap)
+            if (_playerTransform.position.x > _xWrap)
             {
                 _newPosition.x = -_xWrap;
             }
 
-            if (transform.position.x < -_xWrap)
+            if (_playerTransform.position.x < -_xWrap)
             {
                 _newPosition.x = _xWrap;
             }
         }
         else
         {
-            if (transform.position.x > _xClamp)
+            if (_playerTransform.position.x > _xClamp)
             {
                 _newPosition.x = _xClamp;
             }
 
-            if (transform.position.x < -_xClamp)
+            if (_playerTransform.position.x < -_xClamp)
             {
                 _newPosition.x = -_xClamp;
             }
         }
 
-        transform.position = _newPosition;
+        _playerTransform.position = _newPosition;
     }
 
     private void OnEnable()
@@ -122,6 +125,11 @@ public class PlayerPrototype : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log($"Collided with: {other.name}");
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        
     }
 
     public void DamagePlayer()

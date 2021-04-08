@@ -61,4 +61,29 @@ public class Enemy : MonoBehaviour
             
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerPrototype player = other.GetComponent<PlayerPrototype>();
+            if (player != null)
+            {
+                player.DamagePlayer();
+            }
+            else
+            {
+                Debug.LogError("PlayerPrototype = null");
+            }
+            
+            Destroy(this.gameObject);
+        }
+
+        if (other.CompareTag("Laser"))
+        {
+            Destroy(other.gameObject);
+            Destroy(this.gameObject);
+        }
+        Debug.Log(other.name);
+    }
 }

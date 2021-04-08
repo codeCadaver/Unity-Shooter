@@ -7,6 +7,8 @@ TagManager:
   - Shootable
   - BombCollider
   - Wick
+  - Enemy
+  - Laser
   layers:
   - Default
   - TransparentFX
@@ -41,9 +43,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3174255675
+    locked: 0
   - name: Fire
     uniqueID: 3804908061
     locked: 0
-  - name: Default
-    uniqueID: 0
+  - name: Foreground
+    uniqueID: 531814191
     locked: 0
