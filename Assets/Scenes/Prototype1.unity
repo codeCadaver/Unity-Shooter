@@ -156,6 +156,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.3906329, y: 3.7235794}
   m_EdgeRadius: 0
+--- !u!50 &55188743
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55188741}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!4 &55188746 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2812211562712276167, guid: d056f2e79957a29438e94d73e4952ee3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2812211562767188431}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &353713310 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 464940294220580089, guid: 05b6da6c11b01b5458d686d6510fa330,
@@ -205,17 +232,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _is3D: 0
   _playerTransform: {fileID: 1658364570}
+  _startTransform: {fileID: 0}
   _canWrap: 1
   _movementSpeed: 7
   _tilt: 20
+  _rollSpeed: 20
   _xWrap: 12.75
   _xClamp: 9
   _minY: -4
   _maxY: 2
   _cooldownDelay: 0.2
   _laser: {fileID: 5095997836457676905, guid: 515012b2d88d2484092f64e0af6d57ba, type: 3}
+  _tripleShot: {fileID: 0}
   _lives: 3
   _laserOffset: {fileID: 2788473796171847998}
+  _tripleShotActive: 0
 --- !u!1 &433906836
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,6 +1171,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7906890993518719733, guid: ffcbd6153a95a1541affd3b7a9255d93,
         type: 3}
+    - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
+        type: 3}
+      propertyPath: _tripleShot
+      value: 
+      objectReference: {fileID: 6866194635594299867, guid: ced71e917f1e4f74a9b643a79e756902,
+        type: 3}
+    - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
+        type: 3}
+      propertyPath: _startTransform
+      value: 
+      objectReference: {fileID: 55188746}
+    - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
+        type: 3}
+      propertyPath: _tripleShotActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2812211562712276170, guid: d056f2e79957a29438e94d73e4952ee3,
         type: 3}
       propertyPath: m_Name

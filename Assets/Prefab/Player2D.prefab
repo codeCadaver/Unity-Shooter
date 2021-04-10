@@ -41,9 +41,10 @@ GameObject:
   - component: {fileID: 2812211562712276167}
   - component: {fileID: 2812211562712276168}
   - component: {fileID: 2812211562712276169}
+  - component: {fileID: 55188742}
   m_Layer: 0
   m_Name: Player2D
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,6 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f1e65302c7a9ea4f838601be5313135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _is3D: 0
   _playerTransform: {fileID: 2812211562712276167}
   _canWrap: 1
   _movementSpeed: 7
@@ -135,6 +137,32 @@ MonoBehaviour:
   _minY: -4
   _maxY: 2
   _cooldownDelay: 0.2
-  _laser: {fileID: 5095997836457676905, guid: 515012b2d88d2484092f64e0af6d57ba, type: 3}
+  _laser: {fileID: 7906890993518719733, guid: ffcbd6153a95a1541affd3b7a9255d93, type: 3}
   _lives: 3
   _laserOffset: {fileID: 2812211562192372970}
+--- !u!61 &55188742
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2812211562712276170}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.06347358, y: 0.06347352}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.3906329, y: 3.7235794}
+  m_EdgeRadius: 0
