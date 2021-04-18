@@ -6,7 +6,6 @@ using UnityEditor;
 
 public class PlayerPrototype : MonoBehaviour
 {
-
     public static Action<Vector2> OnPlayerMoved;
 
     public bool _is3D = false;
@@ -18,9 +17,13 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private float _rollSpeed = 20f;
     [SerializeField] private float _xWrap,_xClamp, _minY, _maxY;
     [SerializeField] private float _cooldownDelay = 0.5f;
-    [SerializeField] private GameObject _laser, _tripleShot;
-    [SerializeField] private int _lives = 3;
+    [SerializeField] private GameObject _laser, _tripleShot, _shield;
+    [SerializeField] private int _lives = 3, _maxLives = 3;
     [SerializeField] private Transform _laserOffset;
+    [SerializeField] private bool _tripleShotActive = false;
+    [SerializeField] private float _powerUpTime = 5f;
+    [SerializeField] private float _speedBoost = 8f;
+    [SerializeField] private UIManager _uiManager;
 
     private Animator _animator;
     private bool _canBarrelRoll = true;
@@ -30,14 +33,18 @@ public class PlayerPrototype : MonoBehaviour
     private Vector3 _newPosition;
     private float _right, _up;
     private GameObject _projectile;
-
-    public bool _tripleShotActive = false;
+    private float _currentSpeed;
+    private bool _shieldActive = false;
     
     // Start is called before the first frame update
     void Start()
     {
         _animator = GetComponent<Animator>();
-        // StartCoroutine(RollRoutine());
+        _currentSpeed = _movementSpeed;
+        // _uiManager.UpdateCurrentLives(_lives);
+        // _uiManager.UpdateMaxLives(_maxLives);
+        _uiManager.UpdateCurrentLivesImages(_lives);
+        // _uiManager.UpdateCurrentLivesImages(_maxLives);
     }
 
     // Update is called once per frame
@@ -48,6 +55,7 @@ public class PlayerPrototype : MonoBehaviour
         // Debug.Log(_right);
         DoABarrelRoll(_right);
         GetPlayerRotation();
+        
     }
 
     private void Movement()
@@ -59,7 +67,7 @@ public class PlayerPrototype : MonoBehaviour
         
         OnPlayerMoved?.Invoke(movement);
         
-        _playerTransform.Translate(movement * (Time.deltaTime * _movementSpeed));
+        _playerTransform.Translate(movement * (Time.deltaTime * _currentSpeed));
         // transform.rotation *= Quaternion.AngleAxis(_tilt * right, new Vector3(0, 1 * right, 0));
         _newPosition = _playerTransform.position;
         
@@ -88,7 +96,6 @@ public class PlayerPrototype : MonoBehaviour
                 if (_is3D)
                 {
                     var laser = Instantiate(_projectile, _laserOffset.position, Quaternion.Euler(0, _playerRotation.y, 0));
-                    // laser.transform.rotation = Quaternion.Euler(Vector3.up);
                 }
                 else
                 {
@@ -168,8 +175,15 @@ public class PlayerPrototype : MonoBehaviour
 
     public void DamagePlayer()
     {
+        if (_shieldActive)
+        {
+            _shieldActive = false;
+            _shield.SetActive(false);
+            return;
+        }
         _lives--;
-
+        _uiManager.UpdateCurrentLivesImages(_lives);
+        
         if (_lives <= 0)
         {
             SpawnManager spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
@@ -219,5 +233,36 @@ public class PlayerPrototype : MonoBehaviour
         _animator.SetTrigger("RollRight");
     }
 
+    private IEnumerator TripleShotRoutine()
+    {
+        _tripleShotActive = true;
+        yield return new WaitForSeconds(_powerUpTime);
+        _tripleShotActive = false;
+    }
 
+    public void TripleShot()
+    {
+        StartCoroutine(TripleShotRoutine());
+    }
+    
+    private IEnumerator SpeedBoostRoutine()
+    {
+        _currentSpeed = _speedBoost;
+        yield return new WaitForSeconds(_powerUpTime);
+        _currentSpeed = _movementSpeed;
+    }
+
+
+    public void SpeedBoost()
+    {
+        StartCoroutine(SpeedBoostRoutine());
+    }
+    
+    public void Shield()
+    {
+        _shield.SetActive(true);
+        _shieldActive = true;
+        
+    }
+    
 }

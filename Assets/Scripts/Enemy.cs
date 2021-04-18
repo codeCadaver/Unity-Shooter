@@ -6,14 +6,24 @@ using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
+    public static Action<int> OnEnemyDestroyed;
+
+    [SerializeField] private int _enemyValue = 10;
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _screenTopY, _screenBottomY;
     [SerializeField] private float _randomX;
+
+    private Animator _animator;
+    private bool _isDead = false;
+    private Collider2D _collider2D;
+    private int _deathHash = Animator.StringToHash("ExplosionTrigger");
+    private PlayerPrototype _player;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        _animator = GetComponent<Animator>();
+        _collider2D = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -30,10 +40,14 @@ public class Enemy : MonoBehaviour
         // if bottom of screen
         if (transform.position.y < _screenBottomY)
         {
-            // move to top
-            newPosition.y = _screenTopY;
-            newPosition.x = Random.Range(-_randomX, _randomX);
-            transform.position = newPosition;
+            if (!_isDead)
+            {
+                // move to top
+                newPosition.y = _screenTopY;
+                newPosition.x = Random.Range(-_randomX, _randomX);
+                transform.position = newPosition;
+                
+            }
         }
     }
 
@@ -41,10 +55,11 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerPrototype player = other.GetComponent<PlayerPrototype>();
-            if (player != null)
+            
+            _player = other.GetComponent<PlayerPrototype>();
+            if (_player != null)
             {
-                player.DamagePlayer();
+                _player.DamagePlayer();
             }
             else
             {
@@ -53,10 +68,14 @@ public class Enemy : MonoBehaviour
             
             Destroy(this.gameObject);
         }
-
+    
         if (other.CompareTag("Laser"))
         {
             Destroy(other.gameObject);
+            if (OnEnemyDestroyed != null)
+            {
+                OnEnemyDestroyed(_enemyValue);
+            }
             Destroy(this.gameObject);
             
         }
@@ -66,24 +85,38 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerPrototype player = other.GetComponent<PlayerPrototype>();
-            if (player != null)
+            _player = other.GetComponent<PlayerPrototype>();
+            if (_player != null)
             {
-                player.DamagePlayer();
+                _player.DamagePlayer();
             }
             else
             {
                 Debug.LogError("PlayerPrototype = null");
             }
+            // Destroy(this.gameObject);
+            EnemyDestructionAnimation();
             
-            Destroy(this.gameObject);
         }
-
+    
         if (other.CompareTag("Laser"))
         {
             Destroy(other.gameObject);
-            Destroy(this.gameObject);
+            OnEnemyDestroyed?.Invoke(_enemyValue);
+            // Destroy(this.gameObject);
+            EnemyDestructionAnimation();
         }
-        Debug.Log(other.name);
+    }
+
+    public void DestroyEnemy()
+    {
+        Destroy(this.gameObject);
+    }
+
+    private void EnemyDestructionAnimation()
+    {
+        _animator.SetTrigger(_deathHash);
+        _isDead = true;
+        _collider2D.enabled = false;
     }
 }

@@ -26,7 +26,18 @@
       <Path>.idea</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
-      <Path>Temp</Path>
+      <Path>Screenshots</Path>
+      <Path>Screenshots1</Path>
+      <Path>Screenshots10</Path>
+      <Path>Screenshots11</Path>
+      <Path>Screenshots2</Path>
+      <Path>Screenshots3</Path>
+      <Path>Screenshots4</Path>
+      <Path>Screenshots5</Path>
+      <Path>Screenshots6</Path>
+      <Path>Screenshots7</Path>
+      <Path>Screenshots8</Path>
+      <Path>Screenshots9</Path>
       <Path>UserSettings</Path>
       <Path>obj</Path>
     </explicitExcludes>
