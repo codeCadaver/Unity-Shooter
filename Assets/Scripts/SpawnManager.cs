@@ -1,23 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
+    
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _enemyContainer, _powerupContainer;
     [SerializeField] private GameObject[] _powerups;
     [SerializeField] private float _spawnEnemyDelay;
     [SerializeField] private float _minPowerupDelay, _maxPowerupDelay;
     [SerializeField] private float _xPosition, _yPosition;
+    [SerializeField] private float _initialSpawnDelay = 2f;
 
-    private bool _canSpawn = true;
+    private bool _canSpawn = false;
     private WaitForSeconds _wait;
     
     // Start is called before the first frame update
     void Start()
     {
         _wait = new WaitForSeconds(_spawnEnemyDelay);
+    }
+
+
+    private void StartSpawning(bool canSpawn)
+    {
+        _canSpawn = canSpawn;
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
     }
@@ -36,6 +46,7 @@ public class SpawnManager : MonoBehaviour
             // spawn enemy
             if (_enemyPrefab != null)
             {
+                yield return new WaitForSeconds(_initialSpawnDelay);
                 Vector3 spawnPosition =
                     new Vector3(Random.Range(-_xPosition, _xPosition), _yPosition, transform.position.z);
                 GameObject enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity, _enemyContainer.transform);
@@ -51,6 +62,7 @@ public class SpawnManager : MonoBehaviour
         {
             if (_powerups != null)
             {
+                yield return new WaitForSeconds(_initialSpawnDelay);
                 float randomDelay = Random.Range(_minPowerupDelay, _maxPowerupDelay);
                 yield return new WaitForSeconds(randomDelay);
                 int randomPowerup = Random.Range(0, _powerups.Length);
@@ -64,5 +76,10 @@ public class SpawnManager : MonoBehaviour
     public void StopSpawning()
     {
         _canSpawn = false;
+    }
+
+    private void OnEnable()
+    {
+        UIManager.OnStartGame += StartSpawning;
     }
 }

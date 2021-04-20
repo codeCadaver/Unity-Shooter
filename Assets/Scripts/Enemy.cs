@@ -12,8 +12,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _screenTopY, _screenBottomY;
     [SerializeField] private float _randomX;
+    [SerializeField] private AudioClip _explosion;
 
     private Animator _animator;
+    private AudioSource _audioSource;
     private bool _isDead = false;
     private Collider2D _collider2D;
     private int _deathHash = Animator.StringToHash("ExplosionTrigger");
@@ -23,6 +25,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         _collider2D = GetComponent<Collider2D>();
     }
 
@@ -51,35 +54,34 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            
-            _player = other.GetComponent<PlayerPrototype>();
-            if (_player != null)
-            {
-                _player.DamagePlayer();
-            }
-            else
-            {
-                Debug.LogError("PlayerPrototype = null");
-            }
-            
-            Destroy(this.gameObject);
-        }
-    
-        if (other.CompareTag("Laser"))
-        {
-            Destroy(other.gameObject);
-            if (OnEnemyDestroyed != null)
-            {
-                OnEnemyDestroyed(_enemyValue);
-            }
-            Destroy(this.gameObject);
-            
-        }
-    }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         _player = other.GetComponent<PlayerPrototype>();
+    //         if (_player != null)
+    //         {
+    //             _player.DamagePlayer();
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("PlayerPrototype = null");
+    //         }
+    //         
+    //         Destroy(this.gameObject);
+    //     }
+    //
+    //     if (other.CompareTag("Laser"))
+    //     {
+    //         Destroy(other.gameObject);
+    //         if (OnEnemyDestroyed != null)
+    //         {
+    //             OnEnemyDestroyed(_enemyValue);
+    //         }
+    //         Destroy(this.gameObject);
+    //         
+    //     }
+    // }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -103,7 +105,6 @@ public class Enemy : MonoBehaviour
         {
             Destroy(other.gameObject);
             OnEnemyDestroyed?.Invoke(_enemyValue);
-            // Destroy(this.gameObject);
             EnemyDestructionAnimation();
         }
     }
@@ -115,6 +116,7 @@ public class Enemy : MonoBehaviour
 
     private void EnemyDestructionAnimation()
     {
+        _audioSource.PlayOneShot(_explosion);
         _animator.SetTrigger(_deathHash);
         _isDead = true;
         _collider2D.enabled = false;

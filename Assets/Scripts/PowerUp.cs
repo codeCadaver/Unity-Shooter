@@ -18,8 +18,10 @@ public class PowerUp : MonoBehaviour
     [SerializeField] private float _speed = 3f;
     [SerializeField] private float _bottomScreenPosY = -4f;
     [SerializeField] private string _playerString;
+    [SerializeField] private AudioClip _powerupClip;
 
     private Animator _animator;
+    private AudioSource _audioSource;
     private int collectedHash = Animator.StringToHash("Collected");
     private PlayerPrototype _player;
     
@@ -28,11 +30,7 @@ public class PowerUp : MonoBehaviour
     void Start()
     {
         _animator = GetComponent<Animator>();
-        _player = GameObject.Find(_playerString).GetComponent<PlayerPrototype>();
-        if (_player == null)
-        {
-            return;
-        }
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -45,6 +43,7 @@ public class PowerUp : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _player = GameObject.Find(_playerString).GetComponent<PlayerPrototype>();
             if (_player != null)
             {
                 switch (_type)
@@ -62,6 +61,9 @@ public class PowerUp : MonoBehaviour
                         break;
                 }
                 _animator.SetTrigger(collectedHash);
+                // play sound
+                // _audioSource.PlayOneShot(_powerupClip);
+                AudioSource.PlayClipAtPoint(_powerupClip, Camera.main.transform.position);
             }
         }
     }
@@ -78,5 +80,10 @@ public class PowerUp : MonoBehaviour
     public void DestroyPowerup()
     {
         Destroy(this.gameObject);
+    }
+
+    private void PlayPickupSound()
+    {
+        
     }
 }

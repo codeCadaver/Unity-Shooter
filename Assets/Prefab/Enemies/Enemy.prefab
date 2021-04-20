@@ -108,7 +108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a17d5822244ab6458ee3b2cac197928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyValue: 10
   _speed: 5
   _screenTopY: 7
   _screenBottomY: -7
   _randomX: 9
+  _explosion: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}

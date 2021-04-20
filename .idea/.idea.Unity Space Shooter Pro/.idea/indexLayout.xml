@@ -38,8 +38,14 @@
       <Path>Screenshots7</Path>
       <Path>Screenshots8</Path>
       <Path>Screenshots9</Path>
+      <Path>Temp</Path>
       <Path>UserSettings</Path>
       <Path>obj</Path>
     </explicitExcludes>
+  </component>
+  <component name="WorkspaceUserModelUpdater">
+    <attachedFolders />
+    <explicitIncludes />
+    <explicitExcludes />
   </component>
 </project>

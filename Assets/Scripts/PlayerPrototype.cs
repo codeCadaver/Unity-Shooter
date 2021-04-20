@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using UnityEditor;
+using Random = UnityEngine.Random;
 
 public class PlayerPrototype : MonoBehaviour
 {
@@ -17,15 +19,18 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private float _rollSpeed = 20f;
     [SerializeField] private float _xWrap,_xClamp, _minY, _maxY;
     [SerializeField] private float _cooldownDelay = 0.5f;
-    [SerializeField] private GameObject _laser, _tripleShot, _shield;
+    [SerializeField] private GameObject _laser, _tripleShot, _shield, _explosion;
     [SerializeField] private int _lives = 3, _maxLives = 3;
     [SerializeField] private Transform _laserOffset;
     [SerializeField] private bool _tripleShotActive = false;
     [SerializeField] private float _powerUpTime = 5f;
     [SerializeField] private float _speedBoost = 8f;
     [SerializeField] private UIManager _uiManager;
+    [SerializeField] private GameObject[] _damageImages;
+    [SerializeField] private AudioClip _laserSound, _explosionSound;
 
     private Animator _animator;
+    private AudioSource _audioSource;
     private bool _canBarrelRoll = true;
     private bool _canFire = true;
     private Vector3 _playerRotation;
@@ -40,6 +45,7 @@ public class PlayerPrototype : MonoBehaviour
     void Start()
     {
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         _currentSpeed = _movementSpeed;
         // _uiManager.UpdateCurrentLives(_lives);
         // _uiManager.UpdateMaxLives(_maxLives);
@@ -101,6 +107,10 @@ public class PlayerPrototype : MonoBehaviour
                 {
                     var laser = Instantiate(_projectile, _laserOffset.position, Quaternion.identity);
                 }
+                // play laser sound
+                // AudioSource.PlayClipAtPoint(_laserSound, transform.position);
+                // _audioSource.clip = _laserSound;
+                _audioSource.PlayOneShot(_laserSound);
                 // set delay
                 _lastFired = Time.time + _cooldownDelay;
             }
@@ -183,13 +193,19 @@ public class PlayerPrototype : MonoBehaviour
         }
         _lives--;
         _uiManager.UpdateCurrentLivesImages(_lives);
+        ShowDamage();
         
         if (_lives <= 0)
         {
             SpawnManager spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
             spawnManager.StopSpawning();
-            
-            Destroy(this.gameObject);
+
+            Instantiate(_explosion, transform.position, Quaternion.identity);
+            foreach (var obj in transform)
+            {
+                transform.GetComponentInChildren<Transform>().gameObject.SetActive(false);
+            }
+            // Destroy(this.gameObject, 2f);
         }
     }
 
@@ -250,6 +266,26 @@ public class PlayerPrototype : MonoBehaviour
         _currentSpeed = _speedBoost;
         yield return new WaitForSeconds(_powerUpTime);
         _currentSpeed = _movementSpeed;
+    }
+
+    private void ShowDamage()
+    {
+        int randomDamage = Random.Range(0, _damageImages.Length);
+        if (_lives > 1)
+        {
+            if (_damageImages[randomDamage].activeSelf == false)
+            {
+                _damageImages[randomDamage].SetActive(true);
+            }
+        }
+
+        if (_lives == 1)
+        {
+            foreach (var obj in _damageImages)
+            {
+                obj.SetActive(true);
+            }
+        }
     }
 
 

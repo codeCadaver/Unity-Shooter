@@ -10,10 +10,11 @@ using UnityEngine.Rendering.UI;
 public class UIManager : MonoBehaviour
 {
     public static Action<bool> OnGameOver;
+    public static Action<bool> OnStartGame;
 
     [SerializeField] private int _maxLives = 3;
     [SerializeField] private TMP_Text _scoreText;
-    [SerializeField] private TMP_Text _gameOverText, _restartText;
+    [SerializeField] private TMP_Text _gameOverText, _restartText, _startGameText;
     [SerializeField] private Image _livesImage;
     [SerializeField] private Sprite[] _liveSprites;
     // [SerializeField] private Sprite[] _emptyLifeSprites;
@@ -22,6 +23,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Transform _lifeImageContainer, _lifeTransform;
 
     private bool _gameOver = false;
+    private bool _gameStarted = false;
     private int _score = 0;
     private Sprite[] _emptyLifeSprites;
     // private List<Image> _emptyLifeImages = new List<Image>();
@@ -36,6 +38,7 @@ public class UIManager : MonoBehaviour
         
         _restartText.gameObject.SetActive(false);
         _gameOverText.gameObject.SetActive(false);
+        _startGameText.gameObject.SetActive(true);
         
 
         // UpdateLifeImages(_emptyLifeImages, maxLives);
@@ -47,7 +50,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        StartGame();
     }
 
     private void OnEnable()
@@ -103,7 +106,6 @@ public class UIManager : MonoBehaviour
     public void UpdateCurrentLivesImages(int currentLives)
     {
         _livesImage.sprite = _liveSprites[currentLives];
-        Debug.Log($"Sprite: {_livesImage.sprite.name}");
         
         if (currentLives <= 0)
         {
@@ -156,6 +158,19 @@ public class UIManager : MonoBehaviour
             _gameOverText.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.2f);
             _gameOverText.gameObject.SetActive(true);
+        }
+    }
+
+    private void StartGame()
+    {
+        if (!_gameStarted)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _gameStarted = true;
+                _startGameText.gameObject.SetActive(false);
+                OnStartGame?.Invoke(_gameStarted);
+            }
         }
     }
 
