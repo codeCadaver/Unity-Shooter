@@ -35,4 +35,12 @@ public class GameManager : MonoBehaviour
         UIManager.OnGameOver += GameOver;
     }
 
+    private void QuitApplication()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit(0);
+        }
+    }
+
 }

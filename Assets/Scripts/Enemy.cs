@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,6 +14,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _screenTopY, _screenBottomY;
     [SerializeField] private float _randomX;
     [SerializeField] private AudioClip _explosion;
+    [SerializeField] private GameObject _enemyLaser;
+    [SerializeField] private Transform _laserOffset;
 
     private Animator _animator;
     private AudioSource _audioSource;
@@ -20,6 +23,7 @@ public class Enemy : MonoBehaviour
     private Collider2D _collider2D;
     private int _deathHash = Animator.StringToHash("ExplosionTrigger");
     private PlayerPrototype _player;
+    private Rigidbody2D _rigidbody2D;
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +31,9 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
         _collider2D = GetComponent<Collider2D>();
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+
+        StartCoroutine(FireRoutine());
     }
 
     // Update is called once per frame
@@ -85,6 +92,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        
         if (other.CompareTag("Player"))
         {
             _player = other.GetComponent<PlayerPrototype>();
@@ -120,5 +128,23 @@ public class Enemy : MonoBehaviour
         _animator.SetTrigger(_deathHash);
         _isDead = true;
         _collider2D.enabled = false;
+    }
+
+    private void Fire()
+    {
+        // raycast
+            // if hit.collider.compareTag(Player)
+            Instantiate(_enemyLaser, _laserOffset.position, Quaternion.identity);
+            // shoot laser
+
+    }
+
+    private IEnumerator FireRoutine()
+    {
+        while (!_isDead)
+        {
+            Fire();
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

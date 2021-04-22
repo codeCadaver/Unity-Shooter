@@ -19,6 +19,7 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private float _rollSpeed = 20f;
     [SerializeField] private float _xWrap,_xClamp, _minY, _maxY;
     [SerializeField] private float _cooldownDelay = 0.5f;
+    [SerializeField] private float _invincibleLength = 2f;
     [SerializeField] private GameObject _laser, _tripleShot, _shield, _explosion;
     [SerializeField] private int _lives = 3, _maxLives = 3;
     [SerializeField] private Transform _laserOffset;
@@ -33,6 +34,7 @@ public class PlayerPrototype : MonoBehaviour
     private AudioSource _audioSource;
     private bool _canBarrelRoll = true;
     private bool _canFire = true;
+    private Collider2D _collider2D;
     private Vector3 _playerRotation;
     private float _lastFired = 0f;
     private Vector3 _newPosition;
@@ -46,6 +48,7 @@ public class PlayerPrototype : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+        _collider2D = GetComponent<Collider2D>();
         _currentSpeed = _movementSpeed;
         // _uiManager.UpdateCurrentLives(_lives);
         // _uiManager.UpdateMaxLives(_maxLives);
@@ -173,14 +176,13 @@ public class PlayerPrototype : MonoBehaviour
         _playerTransform.position = _startTransform.position;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log($"Collided with: {other.name}");
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
+        if (other.CompareTag("EnemyLaser"))
+        {
+            DamagePlayer();
+        }
     }
 
     public void DamagePlayer()
@@ -191,7 +193,12 @@ public class PlayerPrototype : MonoBehaviour
             _shield.SetActive(false);
             return;
         }
-        _lives--;
+
+        if (_lives > 0)
+        {
+            StartCoroutine(ReceivedDamagedRoutine());
+            _lives--;
+        }
         _uiManager.UpdateCurrentLivesImages(_lives);
         ShowDamage();
         
@@ -205,7 +212,6 @@ public class PlayerPrototype : MonoBehaviour
             {
                 transform.GetComponentInChildren<Transform>().gameObject.SetActive(false);
             }
-            // Destroy(this.gameObject, 2f);
         }
     }
 
@@ -288,6 +294,19 @@ public class PlayerPrototype : MonoBehaviour
         }
     }
 
+    private IEnumerator ReceivedDamagedRoutine()
+    {
+        if (_lives > 0)
+        {
+            _collider2D.enabled = false;
+            // animate player invincible
+            _animator.SetTrigger("InvincibleTrigger");
+            yield return new WaitForSeconds(_invincibleLength);
+            _collider2D.enabled = true;
+        }
+        
+    }
+
 
     public void SpeedBoost()
     {
@@ -298,7 +317,5 @@ public class PlayerPrototype : MonoBehaviour
     {
         _shield.SetActive(true);
         _shieldActive = true;
-        
     }
-    
 }

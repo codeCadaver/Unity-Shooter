@@ -9,6 +9,7 @@ TagManager:
   - Wick
   - Enemy
   - Laser
+  - EnemyLaser
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Postprocessing
   - Post Processing Custom
   - 
-  - 
+  - Enemy
   - 
   - 
   - 

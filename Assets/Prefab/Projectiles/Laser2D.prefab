@@ -97,8 +97,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623dabfa72b78424b95e3575907ba119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isEnemyLaser: 0
   _speed: 8
   _maxY: 9
+  _ownerLayer:
+    serializedVersion: 2
+    m_Bits: 3895
+  _friendLayer:
+    serializedVersion: 2
+    m_Bits: 3895
 --- !u!50 &7906890993518719734
 Rigidbody2D:
   serializedVersion: 4

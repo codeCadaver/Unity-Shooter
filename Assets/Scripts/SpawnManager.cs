@@ -17,7 +17,12 @@ public class SpawnManager : MonoBehaviour
 
     private bool _canSpawn = false;
     private WaitForSeconds _wait;
-    
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
