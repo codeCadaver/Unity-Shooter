@@ -628,6 +628,7 @@ MonoBehaviour:
   _minY: -4
   _maxY: 2
   _cooldownDelay: 0.2
+  _invincibleLength: 2
   _laser: {fileID: 5095997836457676905, guid: 515012b2d88d2484092f64e0af6d57ba, type: 3}
   _tripleShot: {fileID: 0}
   _shield: {fileID: 0}
@@ -1828,7 +1829,7 @@ Transform:
   m_Children:
   - {fileID: 112215108}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1845666342
 GameObject:
@@ -2336,81 +2337,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 770860361717396180, guid: 05b6da6c11b01b5458d686d6510fa330, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 05b6da6c11b01b5458d686d6510fa330, type: 3}
---- !u!1001 &1468607736620055178
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 62641600997262255, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: _explosion
-      value: 
-      objectReference: {fileID: 6508013675867252682, guid: 28393d0fe4563db488b66f2bbb2b1447,
-        type: 3}
-    - target: {fileID: 7961499487716443373, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_Name
-      value: Asteroid
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.07
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.37
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9171846149616368510, guid: 1945219e6db791849b830080dde5d1b6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1945219e6db791849b830080dde5d1b6, type: 3}
 --- !u!4 &2788473796171847998 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3170537774495578983, guid: 05b6da6c11b01b5458d686d6510fa330,
@@ -2682,6 +2608,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
+        type: 3}
+      propertyPath: _asteroid
+      value: 
+      objectReference: {fileID: 7961499487716443373, guid: 1945219e6db791849b830080dde5d1b6,
+        type: 3}
     - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
         type: 3}
       propertyPath: _powerupContainer

@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class SpawnManager : MonoBehaviour
 {
     
-    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyPrefab, _asteroid;
     [SerializeField] private GameObject _enemyContainer, _powerupContainer;
     [SerializeField] private GameObject[] _powerups;
     [SerializeField] private float _spawnEnemyDelay;
@@ -53,10 +53,9 @@ public class SpawnManager : MonoBehaviour
             {
                 yield return new WaitForSeconds(_initialSpawnDelay);
                 Vector3 spawnPosition =
-                    new Vector3(Random.Range(-_xPosition, _xPosition), _yPosition, transform.position.z);
+                    SpawnLocation(-_xPosition, _xPosition, _yPosition, transform.position.z);
                 GameObject enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity, _enemyContainer.transform);
             }
-            // wait 5 seconds
             yield return _wait;
         }
     }
@@ -71,7 +70,7 @@ public class SpawnManager : MonoBehaviour
                 float randomDelay = Random.Range(_minPowerupDelay, _maxPowerupDelay);
                 yield return new WaitForSeconds(randomDelay);
                 int randomPowerup = Random.Range(0, _powerups.Length);
-                Vector3 spawnPosition = new Vector3(Random.Range(-_xPosition, _xPosition), _yPosition, transform.position.z);
+                Vector3 spawnPosition = SpawnLocation(-_xPosition, _xPosition, _yPosition, transform.position.z);
                 GameObject powerup =
                     Instantiate(_powerups[randomPowerup], spawnPosition, Quaternion.identity, _powerupContainer.transform);
             }
@@ -86,5 +85,10 @@ public class SpawnManager : MonoBehaviour
     private void OnEnable()
     {
         UIManager.OnStartGame += StartSpawning;
+    }
+
+    private Vector3 SpawnLocation(float minX, float maxX, float startPositionY, float positionZ)
+    {
+        return new Vector3(Random.Range(minX, maxX), startPositionY, positionZ);
     }
 }

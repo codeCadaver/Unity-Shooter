@@ -26,6 +26,7 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private bool _tripleShotActive = false;
     [SerializeField] private float _powerUpTime = 5f;
     [SerializeField] private float _speedBoost = 8f;
+    [SerializeField] private float _turboMultiplier = 1.5f, _turboAmount = 10f;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private GameObject[] _damageImages;
     [SerializeField] private AudioClip _laserSound, _explosionSound;
@@ -34,14 +35,18 @@ public class PlayerPrototype : MonoBehaviour
     private AudioSource _audioSource;
     private bool _canBarrelRoll = true;
     private bool _canFire = true;
+    private bool _canTurbo = true;
+    private bool _shieldActive = false;
     private Collider2D _collider2D;
-    private Vector3 _playerRotation;
+    private float _currentSpeed;
     private float _lastFired = 0f;
-    private Vector3 _newPosition;
     private float _right, _up;
     private GameObject _projectile;
-    private float _currentSpeed;
-    private bool _shieldActive = false;
+    private int _invincibleHash = Animator.StringToHash("InvincibleTrigger");
+    private int _rollLeftHash = Animator.StringToHash("RollLeft");
+    private int _rollRightHash = Animator.StringToHash("RollRight");
+    private Vector3 _newPosition;
+    private Vector3 _playerRotation;
     
     // Start is called before the first frame update
     void Start()
@@ -50,21 +55,15 @@ public class PlayerPrototype : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _collider2D = GetComponent<Collider2D>();
         _currentSpeed = _movementSpeed;
-        // _uiManager.UpdateCurrentLives(_lives);
-        // _uiManager.UpdateMaxLives(_maxLives);
         _uiManager.UpdateCurrentLivesImages(_lives);
-        // _uiManager.UpdateCurrentLivesImages(_maxLives);
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
-        // DoABarrelRoll();
-        // Debug.Log(_right);
         DoABarrelRoll(_right);
         GetPlayerRotation();
-        
     }
 
     private void Movement()
@@ -77,15 +76,25 @@ public class PlayerPrototype : MonoBehaviour
         OnPlayerMoved?.Invoke(movement);
         
         _playerTransform.Translate(movement * (Time.deltaTime * _currentSpeed));
-        // transform.rotation *= Quaternion.AngleAxis(_tilt * right, new Vector3(0, 1 * right, 0));
         _newPosition = _playerTransform.position;
-        
-        //BarrelRoll()
-        
         
         ClampVert();
         ClampHoriz();
         Fire();
+        Thrusters();
+    }
+
+    private void Thrusters()
+    {
+        var turbo = _movementSpeed * _turboMultiplier;
+        if (_turboAmount > 0 && Input.GetKey(KeyCode.LeftControl))
+        {
+            _currentSpeed = _movementSpeed * _turboMultiplier;
+        }
+        else
+        {
+            _currentSpeed = _movementSpeed;
+        }
     }
 
     private void Fire()
@@ -110,11 +119,7 @@ public class PlayerPrototype : MonoBehaviour
                 {
                     var laser = Instantiate(_projectile, _laserOffset.position, Quaternion.identity);
                 }
-                // play laser sound
-                // AudioSource.PlayClipAtPoint(_laserSound, transform.position);
-                // _audioSource.clip = _laserSound;
                 _audioSource.PlayOneShot(_laserSound);
-                // set delay
                 _lastFired = Time.time + _cooldownDelay;
             }
         }
@@ -220,16 +225,14 @@ public class PlayerPrototype : MonoBehaviour
         // if ctrl key is pressed
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            // transform.Rotate(Vector3.up * (Input.GetAxis("Horizontal") * _rollSpeed * Time.time));
-            // _anim.SetFloat("Direction", direction);
             if (_right < -.1)
             {
-                _animator.SetTrigger("RollLeft");
+                _animator.SetTrigger(_rollLeftHash);
             }
 
             if (_right > .1f)
             {
-                _animator.SetTrigger("RollRight");
+                _animator.SetTrigger(_rollRightHash);
             }
         }
     }
@@ -250,9 +253,9 @@ public class PlayerPrototype : MonoBehaviour
     private IEnumerator RollRoutine()
     {
         yield return new WaitForSeconds(1f);
-        _animator.SetTrigger("RollLeft");
+        _animator.SetTrigger(_rollLeftHash);
         yield return new WaitForSeconds(1f);
-        _animator.SetTrigger("RollRight");
+        _animator.SetTrigger(_rollRightHash);
     }
 
     private IEnumerator TripleShotRoutine()
@@ -299,12 +302,10 @@ public class PlayerPrototype : MonoBehaviour
         if (_lives > 0)
         {
             _collider2D.enabled = false;
-            // animate player invincible
-            _animator.SetTrigger("InvincibleTrigger");
+            _animator.SetTrigger(_invincibleHash);
             yield return new WaitForSeconds(_invincibleLength);
             _collider2D.enabled = true;
         }
-        
     }
 
 
