@@ -61,35 +61,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.CompareTag("Player"))
-    //     {
-    //         _player = other.GetComponent<PlayerPrototype>();
-    //         if (_player != null)
-    //         {
-    //             _player.DamagePlayer();
-    //         }
-    //         else
-    //         {
-    //             Debug.LogError("PlayerPrototype = null");
-    //         }
-    //         
-    //         Destroy(this.gameObject);
-    //     }
-    //
-    //     if (other.CompareTag("Laser"))
-    //     {
-    //         Destroy(other.gameObject);
-    //         if (OnEnemyDestroyed != null)
-    //         {
-    //             OnEnemyDestroyed(_enemyValue);
-    //         }
-    //         Destroy(this.gameObject);
-    //         
-    //     }
-    // }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         
@@ -102,11 +73,9 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                Debug.LogError("PlayerPrototype = null");
+                Debug.LogError("PlayerPrototype = NULL");
             }
-            // Destroy(this.gameObject);
             EnemyDestructionAnimation();
-            
         }
     
         if (other.CompareTag("Laser"))

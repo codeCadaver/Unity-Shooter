@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class PlayerPrototype : MonoBehaviour
 {
     public static Action<Vector2> OnPlayerMoved;
+    public static Action OnPlayerDamage;
 
     public bool _is3D = false;
 
@@ -22,6 +23,7 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private float _invincibleLength = 2f;
     [SerializeField] private GameObject _laser, _tripleShot, _shield, _explosion;
     [SerializeField] private int _lives = 3, _maxLives = 3;
+    [SerializeField] private int _maxAmmo = 15;
     [SerializeField] private Transform _laserOffset;
     [SerializeField] private bool _tripleShotActive = false;
     [SerializeField] private float _powerUpTime = 5f;
@@ -42,7 +44,9 @@ public class PlayerPrototype : MonoBehaviour
     private float _lastFired = 0f;
     private float _right, _up;
     private GameObject _projectile;
+    private int _currentAmmo;
     private int _invincibleHash = Animator.StringToHash("InvincibleTrigger");
+    private int _numberOfHits = 0;
     private int _rollLeftHash = Animator.StringToHash("RollLeft");
     private int _rollRightHash = Animator.StringToHash("RollRight");
     private Vector3 _newPosition;
@@ -53,6 +57,7 @@ public class PlayerPrototype : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+        _currentAmmo = _maxAmmo;
         _collider2D = GetComponent<Collider2D>();
         _currentSpeed = _movementSpeed;
         _uiManager.UpdateCurrentLivesImages(_lives);
@@ -87,7 +92,7 @@ public class PlayerPrototype : MonoBehaviour
     private void Thrusters()
     {
         var turbo = _movementSpeed * _turboMultiplier;
-        if (_turboAmount > 0 && Input.GetKey(KeyCode.LeftControl))
+        if (_turboAmount > 0 && Input.GetKey(KeyCode.LeftShift))
         {
             _currentSpeed = _movementSpeed * _turboMultiplier;
         }
@@ -107,7 +112,7 @@ public class PlayerPrototype : MonoBehaviour
         {
             _projectile = _laser;
         }
-        if (_canFire)
+        if (_canFire && _currentAmmo >0)
         {
             if (Input.GetKey(KeyCode.Space) && Time.time > _lastFired)
             {
@@ -119,6 +124,8 @@ public class PlayerPrototype : MonoBehaviour
                 {
                     var laser = Instantiate(_projectile, _laserOffset.position, Quaternion.identity);
                 }
+
+                _currentAmmo--;
                 _audioSource.PlayOneShot(_laserSound);
                 _lastFired = Time.time + _cooldownDelay;
             }
@@ -192,6 +199,7 @@ public class PlayerPrototype : MonoBehaviour
 
     public void DamagePlayer()
     {
+        OnPlayerDamage?.Invoke();
         if (_shieldActive)
         {
             _shieldActive = false;
@@ -202,10 +210,14 @@ public class PlayerPrototype : MonoBehaviour
         if (_lives > 0)
         {
             StartCoroutine(ReceivedDamagedRoutine());
-            _lives--;
+            _numberOfHits++;
+            if (_numberOfHits == 1)
+            {
+                _lives--;
+                ShowDamage();
+            }
         }
         _uiManager.UpdateCurrentLivesImages(_lives);
-        ShowDamage();
         
         if (_lives <= 0)
         {
@@ -304,6 +316,7 @@ public class PlayerPrototype : MonoBehaviour
             _collider2D.enabled = false;
             _animator.SetTrigger(_invincibleHash);
             yield return new WaitForSeconds(_invincibleLength);
+            _numberOfHits = 0;
             _collider2D.enabled = true;
         }
     }
@@ -319,4 +332,5 @@ public class PlayerPrototype : MonoBehaviour
         _shield.SetActive(true);
         _shieldActive = true;
     }
+    
 }

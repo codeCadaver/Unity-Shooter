@@ -56,6 +56,9 @@ public class PowerUp : MonoBehaviour
                         break;
                     case PowerUpType.Shield:
                         _player.Shield();
+                        // get shield
+                        Shield shield = FindObjectOfType<Shield>();
+                        shield.FullShields();
                         break;
                     default:
                         break;
