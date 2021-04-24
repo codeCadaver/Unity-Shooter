@@ -60,6 +60,11 @@ public class UIManager : MonoBehaviour
         Enemy.OnEnemyDestroyed += UpdateScore;
     }
 
+    private void OnDisable()
+    {
+        Enemy.OnEnemyDestroyed -= UpdateScore;
+    }
+
     private void UpdateScore(int value)
     {
         _score += value;

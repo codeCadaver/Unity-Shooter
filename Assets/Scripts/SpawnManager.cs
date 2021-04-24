@@ -20,7 +20,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        // DontDestroyOnLoad(this.gameObject);
     }
 
     // Start is called before the first frame update
@@ -85,6 +85,11 @@ public class SpawnManager : MonoBehaviour
     private void OnEnable()
     {
         UIManager.OnStartGame += StartSpawning;
+    }
+
+    private void OnDisable()
+    {
+        UIManager.OnStartGame -= StartSpawning;
     }
 
     private Vector3 SpawnLocation(float minX, float maxX, float startPositionY, float positionZ)

@@ -302,21 +302,50 @@ public class PlayerPrototype : MonoBehaviour
     private void ShowDamage()
     {
         int randomDamage = Random.Range(0, _damageImages.Length);
-        if (_lives > 1)
-        {
-            if (_damageImages[randomDamage].activeSelf == false)
-            {
-                _damageImages[randomDamage].SetActive(true);
-            }
-        }
+        _uiManager.UpdateCurrentLivesImages(_lives);
 
-        if (_lives == 1)
+        switch (_lives)
         {
-            foreach (var obj in _damageImages)
-            {
-                obj.SetActive(true);
-            }
+            case 3:
+                foreach (var damage in _damageImages)
+                {
+                    damage.SetActive(false);
+                }
+                break;
+            
+            case 2:
+                foreach (var obj in _damageImages)
+                {
+                    obj.SetActive(false);
+                }
+                if (_damageImages[randomDamage].activeSelf == false)
+                {
+                    _damageImages[randomDamage].SetActive(true);
+                }
+                break;
+            case 1:
+                foreach (var damage in _damageImages)
+                {
+                    damage.SetActive(true);
+                }
+                break;
+            
+            default:
+                Debug.Log("PlayerPrototype::ShowDamage() out of lives");
+                break;
         }
+    //     if (_lives > 1)
+    //     {
+    //         
+    //     }
+    //
+    //     if (_lives == 1)
+    //     {
+    //         foreach (var obj in _damageImages)
+    //         {
+    //             obj.SetActive(true);
+    //         }
+    //     }
     }
 
     private IEnumerator ReceivedDamagedRoutine()
@@ -354,14 +383,15 @@ public class PlayerPrototype : MonoBehaviour
         {
             _lives++;
             // repair damage
-            if (_damageImages[0].activeSelf)
-            {
-                _damageImages[0].SetActive(false);
-            }
-            else
-            {
-                _damageImages[0].SetActive(false);
-            }
+            ShowDamage();
+            // if (_damageImages[0].activeSelf)
+            // {
+            //     _damageImages[0].SetActive(false);
+            // }
+            // else
+            // {
+            //     _damageImages[0].SetActive(false);
+            // }
 
 
         }

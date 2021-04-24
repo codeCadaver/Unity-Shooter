@@ -52,6 +52,7 @@ public class PowerUp : MonoBehaviour
                 {
                     case PowerUpType.TripleShot:
                         _player.TripleShot();
+                        _player.AmmoReload();
                         break;
                     case PowerUpType.SpeedBoost:
                         _player.SpeedBoost();

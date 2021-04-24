@@ -9,7 +9,9 @@ public class Shield : MonoBehaviour
     [SerializeField] private Material[] _shieldStrengMaterials;
     [SerializeField] private float _fresnalStartPower = 12, _fresnalMaxMultiplier = 30, _fresnalMinMultiplier = 5, _fresnalMainPower = 1.5f;
 
+    private bool _takeDamage = true;
     private int _currentShieldHealth;
+    private int _numberOfHits = 0;
     private MeshRenderer _mesh;
 
     void OnAwake()
@@ -42,15 +44,28 @@ public class Shield : MonoBehaviour
 
     private void DamageShield()
     {
-        if (_currentShieldHealth > 0)
+        if (_takeDamage)
         {
-            _currentShieldHealth--;
-            GetComponent<MeshRenderer>().material = _shieldStrengMaterials[1];
+            _takeDamage = false;
+            
+            if (_currentShieldHealth > 0)
+            {
+                _currentShieldHealth--;
+                GetComponent<MeshRenderer>().material = _shieldStrengMaterials[1];
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+            }
         }
-        else
-        {
-            this.gameObject.SetActive(false);
-        }
+
+        _takeDamage = true;
+    }
+
+    IEnumerator ShieldDamagedRoutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _takeDamage = true;
     }
 
     private void OnEnable()
