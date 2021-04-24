@@ -59,12 +59,15 @@ public class Shield : MonoBehaviour
             }
         }
 
-        _takeDamage = true;
+        if (this.gameObject.activeSelf)
+        {
+            StartCoroutine(ShieldDamagedRoutine());
+        }        
     }
 
     IEnumerator ShieldDamagedRoutine()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         _takeDamage = true;
     }
 

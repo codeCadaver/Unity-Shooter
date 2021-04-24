@@ -28,7 +28,7 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private bool _tripleShotActive = false;
     [SerializeField] private float _powerUpTime = 5f;
     [SerializeField] private float _speedBoost = 8f;
-    [SerializeField] private float _turboMultiplier = 1.5f, _turboAmount = 10f;
+    [SerializeField] private float _thrusterMultiplier = 1.5f, _thrusterMaxAmount = 10f;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private GameObject[] _damageImages;
     [SerializeField] private AudioClip _laserSound, _explosionSound;
@@ -37,12 +37,14 @@ public class PlayerPrototype : MonoBehaviour
     private AudioSource _audioSource;
     private bool _canBarrelRoll = true;
     private bool _canFire = true;
+    private bool _canTakeDamage = true;
     private bool _canTurbo = true;
     private bool _shieldActive = false;
     private Collider2D _collider2D;
     private float _currentSpeed;
     private float _lastFired = 0f;
     private float _right, _up;
+    private float _thrusterCurrent;
     private GameObject _projectile;
     private int _currentAmmo;
     private int _invincibleHash = Animator.StringToHash("InvincibleTrigger");
@@ -61,6 +63,7 @@ public class PlayerPrototype : MonoBehaviour
         _collider2D = GetComponent<Collider2D>();
         _currentSpeed = _movementSpeed;
         _uiManager.UpdateCurrentLivesImages(_lives);
+        _thrusterCurrent = _thrusterMaxAmount;
     }
 
     // Update is called once per frame
@@ -91,15 +94,28 @@ public class PlayerPrototype : MonoBehaviour
 
     private void Thrusters()
     {
-        var turbo = _movementSpeed * _turboMultiplier;
-        if (_turboAmount > 0 && Input.GetKey(KeyCode.LeftShift))
+        var turbo = _movementSpeed * _thrusterMultiplier;
+        if (_thrusterMaxAmount > 0 && Input.GetKey(KeyCode.LeftShift))
         {
-            _currentSpeed = _movementSpeed * _turboMultiplier;
+            _currentSpeed = _movementSpeed * _thrusterMultiplier;
+            _thrusterCurrent -= Time.deltaTime * 2;
+            _uiManager.ThrusterAmount(_thrusterCurrent/_thrusterMaxAmount);
         }
         else
         {
-            _currentSpeed = _movementSpeed;
+            if (_thrusterCurrent <= _thrusterMaxAmount)
+            {
+                _currentSpeed = _movementSpeed;
+                _thrusterCurrent += Time.deltaTime;
+                _uiManager.ThrusterAmount(_thrusterCurrent/_thrusterMaxAmount);
+            }
         }
+
+        if (_thrusterCurrent <= 0)
+        {
+            _thrusterCurrent = 0;
+        }
+
     }
 
     private void Fire()
@@ -220,9 +236,9 @@ public class PlayerPrototype : MonoBehaviour
         if (_lives > 0)
         {
             StartCoroutine(ReceivedDamagedRoutine());
-            _numberOfHits++;
-            if (_numberOfHits == 1)
+            if (_canTakeDamage)
             {
+                _canTakeDamage = false;
                 _lives--;
                 ShowDamage();
             }
@@ -357,6 +373,7 @@ public class PlayerPrototype : MonoBehaviour
             yield return new WaitForSeconds(_invincibleLength);
             _numberOfHits = 0;
             _collider2D.enabled = true;
+            _canTakeDamage = true;
         }
     }
 

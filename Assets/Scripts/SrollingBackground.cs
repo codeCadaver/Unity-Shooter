@@ -24,4 +24,5 @@ public class SrollingBackground : MonoBehaviour
     {
         _renderer.material.mainTextureOffset = new Vector2(transform.position.x, Time.time * _scrollSpeed);
     }
+
 }

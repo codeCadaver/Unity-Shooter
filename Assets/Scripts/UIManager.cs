@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _gameOverText, _restartText, _startGameText;
     [SerializeField] private TMP_Text _noAmmoText;
     [SerializeField] private float _noAmmoTextDisplayTime = 2f;
+    [SerializeField] private Image _thrusterImage;
     [SerializeField] private Image _livesImage;
     [SerializeField] private Sprite[] _liveSprites;
     // [SerializeField] private Sprite[] _emptyLifeSprites;
@@ -191,5 +192,10 @@ public class UIManager : MonoBehaviour
         _noAmmoText.gameObject.SetActive(true);
         yield return new WaitForSeconds(_noAmmoTextDisplayTime);
         _noAmmoText.gameObject.SetActive(false);
+    }
+
+    public void ThrusterAmount(float amount)
+    {
+        _thrusterImage.fillAmount = amount;
     }
 }
