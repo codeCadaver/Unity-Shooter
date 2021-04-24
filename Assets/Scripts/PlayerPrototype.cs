@@ -104,6 +104,14 @@ public class PlayerPrototype : MonoBehaviour
 
     private void Fire()
     {
+        if (_currentAmmo <= 0)
+        {
+            // _uiManager.OutOfAmmo();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _uiManager.OutOfAmmo();
+            }
+        }
         if (_tripleShotActive)
         {
             _projectile = _tripleShot;
@@ -129,6 +137,8 @@ public class PlayerPrototype : MonoBehaviour
                 _audioSource.PlayOneShot(_laserSound);
                 _lastFired = Time.time + _cooldownDelay;
             }
+
+            
         }
     }
 
@@ -331,6 +341,30 @@ public class PlayerPrototype : MonoBehaviour
     {
         _shield.SetActive(true);
         _shieldActive = true;
+    }
+
+    public void AmmoReload()
+    {
+        _currentAmmo = _maxAmmo;
+    }
+
+    public void HealthRestore()
+    {
+        if (_lives < _maxLives)
+        {
+            _lives++;
+            // repair damage
+            if (_damageImages[0].activeSelf)
+            {
+                _damageImages[0].SetActive(false);
+            }
+            else
+            {
+                _damageImages[0].SetActive(false);
+            }
+
+
+        }
     }
     
 }

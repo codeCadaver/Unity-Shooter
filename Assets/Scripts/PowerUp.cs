@@ -10,7 +10,9 @@ public class PowerUp : MonoBehaviour
     {
         TripleShot = 0,
         SpeedBoost = 1,
-        Shield = 2
+        Shield = 2,
+        Ammo = 3,
+        Health = 4
     };
 
     [SerializeField] private PowerUpType _type;
@@ -60,12 +62,17 @@ public class PowerUp : MonoBehaviour
                         Shield shield = FindObjectOfType<Shield>();
                         shield.FullShields();
                         break;
+                    case PowerUpType.Ammo:
+                        _player.AmmoReload();
+                        break;
+                    case PowerUpType.Health:
+                        _player.HealthRestore();
+                        break;
+                        
                     default:
                         break;
                 }
                 _animator.SetTrigger(collectedHash);
-                // play sound
-                // _audioSource.PlayOneShot(_powerupClip);
                 AudioSource.PlayClipAtPoint(_powerupClip, Camera.main.transform.position);
             }
         }

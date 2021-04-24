@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private int _maxLives = 3;
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private TMP_Text _gameOverText, _restartText, _startGameText;
+    [SerializeField] private TMP_Text _noAmmoText;
+    [SerializeField] private float _noAmmoTextDisplayTime = 2f;
     [SerializeField] private Image _livesImage;
     [SerializeField] private Sprite[] _liveSprites;
     // [SerializeField] private Sprite[] _emptyLifeSprites;
@@ -174,4 +176,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void OutOfAmmo()
+    {
+        StartCoroutine(NoAmmoRoutine());
+    }
+
+    IEnumerator NoAmmoRoutine()
+    {
+        _noAmmoText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(_noAmmoTextDisplayTime);
+        _noAmmoText.gameObject.SetActive(false);
+    }
 }

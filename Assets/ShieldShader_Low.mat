@@ -39,6 +39,8 @@ Material:
     m_Floats:
     - Vector1_00744488c605471ead0c0c4952d752d7: 0.4
     - Vector1_3fe320e9716d4ce59bae25299a761deb: 1.54
+    - _fresnalPower: 1.5
+    - _speed: 0.5
     m_Colors:
     - _color: {r: 102.755714, g: 4.8776665, b: 0, a: 1}
     - _tiling: {r: 3, g: 2, b: 0, a: 0}
