@@ -28,7 +28,7 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private bool _tripleShotActive = false;
     [SerializeField] private float _powerUpTime = 5f;
     [SerializeField] private float _speedBoost = 8f;
-    [SerializeField] private float _thrusterMultiplier = 1.5f, _thrusterMaxAmount = 10f;
+    [SerializeField] private float _thrusterMultiplier = 2f, _thrusterMaxAmount = 10f;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private GameObject[] _damageImages;
     [SerializeField] private AudioClip _laserSound, _explosionSound;
@@ -114,6 +114,7 @@ public class PlayerPrototype : MonoBehaviour
         if (_thrusterCurrent <= 0)
         {
             _thrusterCurrent = 0;
+            _currentSpeed = _movementSpeed;
         }
 
     }
