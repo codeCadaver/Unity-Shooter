@@ -1456,6 +1456,75 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1001 &1639364053
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205065, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313261381945205076, guid: da2929e178d72784a96e2a450ddefbb3,
+        type: 3}
+      propertyPath: m_Name
+      value: PowerUp-Shield
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: da2929e178d72784a96e2a450ddefbb3, type: 3}
 --- !u!4 &1658364570 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 770860362229197979, guid: 05b6da6c11b01b5458d686d6510fa330,
@@ -1655,7 +1724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1686525076
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2389,7 +2458,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 53, y: -408}
+  m_AnchoredPosition: {x: 66, y: -395}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1985581622
@@ -2412,7 +2481,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 0a486389e51b8d34384a2d8c917cbc4f, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2918,6 +2987,11 @@ PrefabInstance:
       propertyPath: _uiManager
       value: 
       objectReference: {fileID: 1845666343}
+    - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
+        type: 3}
+      propertyPath: _thrusterMultiplier
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2812211562712276170, guid: d056f2e79957a29438e94d73e4952ee3,
         type: 3}
       propertyPath: m_Name
