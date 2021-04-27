@@ -165,7 +165,7 @@ public class UIManager : MonoBehaviour
     {
         float currentTime = -1f;
         {
-            if (Time.time > currentTime + delay)
+            // if (Time.time > currentTime + delay)
             {
                 for (int i = _ammoImages.Length - 1; i >= 0; i--)
                 {
@@ -175,7 +175,7 @@ public class UIManager : MonoBehaviour
                     }
                     else
                     {
-                        _ammoImages[i].SetActive(false);
+                        _ammoImages[i].GetComponent<AmmoUI>().Disappear();
                         currentTime = Time.time;
                         break;
                     }

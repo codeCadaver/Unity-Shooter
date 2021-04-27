@@ -99,9 +99,12 @@ public class PlayerPrototype : MonoBehaviour
         var turbo = _movementSpeed * _thrusterMultiplier;
         if (_thrusterMaxAmount > 0 && Input.GetKey(KeyCode.LeftShift))
         {
-            _currentSpeed = _movementSpeed * _thrusterMultiplier;
-            _thrusterCurrent -= Time.deltaTime * 2;
-            _uiManager.ThrusterAmount(_thrusterCurrent/_thrusterMaxAmount);
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+            {
+                _currentSpeed = _movementSpeed * _thrusterMultiplier;
+                _thrusterCurrent -= Time.deltaTime * 2;
+                _uiManager.ThrusterAmount(_thrusterCurrent/_thrusterMaxAmount);
+            }
         }
         else
         {
@@ -141,7 +144,7 @@ public class PlayerPrototype : MonoBehaviour
         }
         if (_canFire && _currentAmmo >0)
         {
-            if (Input.GetKey(KeyCode.Space) && Time.time > _lastFired)
+            if (Input.GetKeyDown(KeyCode.Space) && Time.time > _lastFired)
             {
                 if (_is3D)
                 {
@@ -355,18 +358,6 @@ public class PlayerPrototype : MonoBehaviour
                 Debug.Log("PlayerPrototype::ShowDamage() out of lives");
                 break;
         }
-    //     if (_lives > 1)
-    //     {
-    //         
-    //     }
-    //
-    //     if (_lives == 1)
-    //     {
-    //         foreach (var obj in _damageImages)
-    //         {
-    //             obj.SetActive(true);
-    //         }
-    //     }
     }
 
     private IEnumerator ReceivedDamagedRoutine()
@@ -381,7 +372,6 @@ public class PlayerPrototype : MonoBehaviour
             _canTakeDamage = true;
         }
     }
-
 
     public void SpeedBoost()
     {
@@ -407,16 +397,6 @@ public class PlayerPrototype : MonoBehaviour
             _lives++;
             // repair damage
             ShowDamage();
-            // if (_damageImages[0].activeSelf)
-            // {
-            //     _damageImages[0].SetActive(false);
-            // }
-            // else
-            // {
-            //     _damageImages[0].SetActive(false);
-            // }
-
-
         }
     }
     
