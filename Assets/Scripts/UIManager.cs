@@ -20,21 +20,24 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image _thrusterImage;
     [SerializeField] private Image _livesImage;
     [SerializeField] private Sprite[] _liveSprites;
-    // [SerializeField] private Sprite[] _emptyLifeSprites;
     [SerializeField] private Sprite _lifeEmptySprite, _lifeFullSprite;
     [SerializeField] private Image _lifeEmptyImage, _lifeFullImage;
     [SerializeField] private Transform _lifeImageContainer, _lifeTransform;
+    [SerializeField] private GameObject _ammoUI;
+    [SerializeField] private Transform _ammoUIStart, _ammoUIContainer;
+    [SerializeField] private float _ammoUI_HOffset, _ammoUI_VOffset;
+    [SerializeField] private int _maxAmmo = 15;
 
     private bool _gameOver = false;
     private bool _gameStarted = false;
+    public GameObject[] _ammoImages;
     private int _score = 0;
     private Sprite[] _emptyLifeSprites;
-    // private List<Image> _emptyLifeImages = new List<Image>();
-    // private List<Image> _fullLifeImages = new List<Image>();
     
     // Start is called before the first frame update
     void Start()
     {
+        _ammoImages = new GameObject[_maxAmmo];
         _emptyLifeSprites = new Sprite[_maxLives];
         _gameOver = false;
         _scoreText.text = "Score: 0";
@@ -43,11 +46,8 @@ public class UIManager : MonoBehaviour
         _gameOverText.gameObject.SetActive(false);
         _startGameText.gameObject.SetActive(true);
         
-
-        // UpdateLifeImages(_emptyLifeImages, maxLives);
-        // UpdateLifeImages(_fullLifeImages, currentLives);
-        
         SetEmptyLives();
+        SetAmmoUI(_maxAmmo);
     }
 
     // Update is called once per frame
@@ -56,60 +56,12 @@ public class UIManager : MonoBehaviour
         StartGame();
     }
 
-    private void OnEnable()
-    {
-        Enemy.OnEnemyDestroyed += UpdateScore;
-    }
-
-    private void OnDisable()
-    {
-        Enemy.OnEnemyDestroyed -= UpdateScore;
-    }
 
     private void UpdateScore(int value)
     {
         _score += value;
         _scoreText.text = $"Score: {_score}";
     }
-
-    // public void UpdateMaxLivesImages(int lives)
-    // {
-    //     // var imagePosition = _lifeEmptyImage.transform.position;
-    //     // for (int i = 0; i < maxLives - 1; i++)
-    //     // {
-    //     //     _emptyLifeImages.Add(Instantiate(_lifeEmptyImage, _lifeTransform.position, Quaternion.identity,
-    //     //         _lifeImageContainer));
-    //     //     imagePosition.x += _emptyLifeImages[i].sprite.rect.width/2.5f;
-    //     //     _emptyLifeImages[i].transform.position = imagePosition;
-    //     // }
-    //
-    //     UpdateLifeImages(_emptyLifeImages, lives);
-    // }
-    //
-    // public void UpdateCurrentLives(int lives)
-    // {
-    //     // var imagePosition = _lifeFullImage.transform.position;
-    //     // for (int i = 0; i < lives - 1; i++)
-    //     // {
-    //     //     _fullLifeImages.Add(Instantiate(_lifeFullImage, _lifeTransform.position, Quaternion.identity, _lifeImageContainer));
-    //     //     imagePosition.x += _fullLifeImages[i].sprite.rect.width / 2.5f;
-    //     //     _fullLifeImages[i].transform.position = imagePosition;
-    //     // }
-    //
-    //     UpdateLifeImages(_fullLifeImages, lives);
-    // }
-
-    // private void UpdateLifeImages(List<Image> imageList, int lives)
-    // {
-    //     var imagePosition = _lifeEmptyImage.transform.position;
-    //     for (int i = 0; i < lives - 1; i++)
-    //     {
-    //         imageList.Add(Instantiate(_lifeEmptyImage, _lifeTransform.position, Quaternion.identity,
-    //             _lifeImageContainer));
-    //         imagePosition.x += imageList[i].sprite.rect.width/2.5f;
-    //         imageList[i].transform.position = imagePosition;
-    //     }
-    // }
 
     public void UpdateCurrentLivesImages(int currentLives)
     {
@@ -140,22 +92,8 @@ public class UIManager : MonoBehaviour
             {
                 _emptyLifeSprites[i] = Instantiate(_lifeEmptySprite, imagePosition, Quaternion.identity, _lifeImageContainer);
             }
-            
         }
     }
-    //
-    // public void UpdateMaxLives(int maxLives)
-    // {
-    //     foreach (var image in _emptyLifeImages)
-    //     {
-    //         image.gameObject.SetActive(false);
-    //     }
-    //
-    //     for (int i = 0; i < _emptyLifeImages.Count - 1; i++)
-    //     {
-    //         _emptyLifeImages[i].gameObject.SetActive(true);
-    //     }
-    // }
 
     IEnumerator GameOverRoutine()
     {
@@ -197,5 +135,78 @@ public class UIManager : MonoBehaviour
     public void ThrusterAmount(float amount)
     {
         _thrusterImage.fillAmount = amount;
+    }
+
+    private void SetAmmoUI(int amount)
+    {
+        int total = 0;
+        int horizCount = 0;
+        int vertCount = 0;
+        
+        foreach (var image in _ammoImages)
+        {
+            // set position offset
+            Vector3 newPos = _ammoUIStart.position;
+            newPos.x += horizCount * _ammoUI_HOffset;
+            newPos.y += vertCount * _ammoUI_VOffset;
+            GameObject newImage = Instantiate(_ammoUI, newPos, Quaternion.identity, _ammoUIContainer);
+            _ammoImages[total] = newImage;
+            total++;
+            horizCount++;
+            if (horizCount > 4)
+            {
+                horizCount = 0;
+                vertCount--;
+            }
+        }
+    }
+
+    private void SubtracAmmo(float delay)
+    {
+        float currentTime = -1f;
+        {
+            if (Time.time > currentTime + delay)
+            {
+                for (int i = _ammoImages.Length - 1; i >= 0; i--)
+                {
+                    if (!_ammoImages[i].activeSelf)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        _ammoImages[i].SetActive(false);
+                        currentTime = Time.time;
+                        break;
+                    }
+                }
+                
+            }
+        }
+    }
+     
+    private void OnEnable()
+    {
+        Enemy.OnEnemyDestroyed += UpdateScore;
+        PlayerPrototype.OnPlayerFired += SubtracAmmo;
+    }
+
+    private void OnDisable()
+    {
+        Enemy.OnEnemyDestroyed -= UpdateScore;
+        PlayerPrototype.OnPlayerFired -= SubtracAmmo;
+    }   
+        
+    public int GetMaxAmmo()
+    {
+        return _maxAmmo;
+    }
+
+    public void RefillAmmo()
+    {
+        foreach (var ammoImage in _ammoImages)
+        {
+            ammoImage.SetActive(true);
+        }
     }
 }

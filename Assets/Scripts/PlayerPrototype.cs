@@ -10,6 +10,7 @@ public class PlayerPrototype : MonoBehaviour
 {
     public static Action<Vector2> OnPlayerMoved;
     public static Action OnPlayerDamage;
+    public static Action<float> OnPlayerFired;
 
     public bool _is3D = false;
 
@@ -23,7 +24,6 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private float _invincibleLength = 2f;
     [SerializeField] private GameObject _laser, _tripleShot, _shield, _explosion;
     [SerializeField] private int _lives = 3, _maxLives = 3;
-    [SerializeField] private int _maxAmmo = 15;
     [SerializeField] private Transform _laserOffset;
     [SerializeField] private bool _tripleShotActive = false;
     [SerializeField] private float _powerUpTime = 5f;
@@ -46,8 +46,9 @@ public class PlayerPrototype : MonoBehaviour
     private float _right, _up;
     private float _thrusterCurrent;
     private GameObject _projectile;
-    private int _currentAmmo;
+    private int _currentAmmo, _maxAmmo;
     private int _invincibleHash = Animator.StringToHash("InvincibleTrigger");
+    
     private int _numberOfHits = 0;
     private int _rollLeftHash = Animator.StringToHash("RollLeft");
     private int _rollRightHash = Animator.StringToHash("RollRight");
@@ -57,13 +58,14 @@ public class PlayerPrototype : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _maxAmmo = _uiManager.GetMaxAmmo();
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
-        _currentAmmo = _maxAmmo;
         _collider2D = GetComponent<Collider2D>();
         _currentSpeed = _movementSpeed;
         _uiManager.UpdateCurrentLivesImages(_lives);
         _thrusterCurrent = _thrusterMaxAmount;
+        _currentAmmo = _maxAmmo;
     }
 
     // Update is called once per frame
@@ -150,6 +152,8 @@ public class PlayerPrototype : MonoBehaviour
                     var laser = Instantiate(_projectile, _laserOffset.position, Quaternion.identity);
                 }
 
+                // Communicate fire
+                OnPlayerFired?.Invoke(_cooldownDelay);
                 _currentAmmo--;
                 _audioSource.PlayOneShot(_laserSound);
                 _lastFired = Time.time + _cooldownDelay;
@@ -393,6 +397,7 @@ public class PlayerPrototype : MonoBehaviour
     public void AmmoReload()
     {
         _currentAmmo = _maxAmmo;
+        _uiManager.RefillAmmo();
     }
 
     public void HealthRestore()
