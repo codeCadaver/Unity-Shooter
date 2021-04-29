@@ -22,8 +22,10 @@ public class Enemy : MonoBehaviour
     private bool _isDead = false;
     private Collider2D _collider2D;
     private int _deathHash = Animator.StringToHash("ExplosionTrigger");
+    private GameObject player;
     private PlayerPrototype _player;
     private Rigidbody2D _rigidbody2D;
+    private int _movementType = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -32,8 +34,12 @@ public class Enemy : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _collider2D = GetComponent<Collider2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        
+        player = GameObject.FindWithTag("Player");
 
         StartCoroutine(FireRoutine());
+        
+        SetMovementType(3);
     }
 
     // Update is called once per frame
@@ -42,11 +48,36 @@ public class Enemy : MonoBehaviour
         Movement();
     }
 
+    private void SetMovementType(int movements)
+    {
+        _movementType = Random.Range(0, movements+1);
+    }
+
     private void Movement()
     {
-        Vector3 newPosition = transform.position;
+        
+
         // move down
-        transform.Translate(Vector3.down *(Time.deltaTime * _speed));
+        switch (_movementType)
+        {
+            case 0: 
+                MoveDown();
+                break;
+            case 1:
+                MoveTowardsPlayer();
+                break;
+                
+            default:
+                MoveDown();
+                break;
+        }
+        
+    }
+
+    private void MoveDown()
+    {
+        Vector3 newPosition = transform.position;
+        transform.Translate(Vector2.down * (Time.deltaTime * _speed));
         // if bottom of screen
         if (transform.position.y < _screenBottomY)
         {
@@ -56,10 +87,34 @@ public class Enemy : MonoBehaviour
                 newPosition.y = _screenTopY;
                 newPosition.x = Random.Range(-_randomX, _randomX);
                 transform.position = newPosition;
-                
             }
         }
     }
+
+    private void MoveTowardsPlayer()
+    {
+        GameObject player = GameObject.Find("Player2D");
+        MoveDown();
+        // move along x axis towards player
+        if (player != null)
+        {
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, player.transform.position, Time.deltaTime);
+            newPosition.y = transform.position.y;
+            transform.position = newPosition;
+
+            if (transform.position.y < _screenBottomY)
+            {
+                if (!_isDead)
+                {
+                    // move to top
+                    newPosition.y = _screenTopY;
+                    newPosition.x = Random.Range(-_randomX, _randomX);
+                    transform.position = newPosition;
+                }
+            }
+        }
+    }
+    
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -161,7 +161,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void SubtracAmmo(float delay)
+    private void SubtractAmmo(float delay)
     {
         float currentTime = -1f;
         {
@@ -188,13 +188,13 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         Enemy.OnEnemyDestroyed += UpdateScore;
-        PlayerPrototype.OnPlayerFired += SubtracAmmo;
+        PlayerPrototype.OnPlayerFired += SubtractAmmo;
     }
 
     private void OnDisable()
     {
         Enemy.OnEnemyDestroyed -= UpdateScore;
-        PlayerPrototype.OnPlayerFired -= SubtracAmmo;
+        PlayerPrototype.OnPlayerFired -= SubtractAmmo;
     }   
         
     public int GetMaxAmmo()

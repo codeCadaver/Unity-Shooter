@@ -3062,11 +3062,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8469866985242209308, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
         type: 3}
       propertyPath: _asteroid
       value: 
       objectReference: {fileID: 7961499487716443373, guid: 1945219e6db791849b830080dde5d1b6,
+        type: 3}
+    - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
+        type: 3}
+      propertyPath: _yPosition
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
+        type: 3}
+      propertyPath: _waveManager
+      value: 
+      objectReference: {fileID: 4813818232092270979, guid: 85e1e6539926c674394421e42fdae6ab,
         type: 3}
     - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
         type: 3}

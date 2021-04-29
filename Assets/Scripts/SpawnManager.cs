@@ -7,15 +7,18 @@ using Random = UnityEngine.Random;
 public class SpawnManager : MonoBehaviour
 {
     
-    [SerializeField] private GameObject _enemyPrefab, _asteroid;
+    [SerializeField] private GameObject[] _enemyPrefab;
     [SerializeField] private GameObject _enemyContainer, _powerupContainer;
     [SerializeField] private GameObject[] _powerups;
     [SerializeField] private float _spawnEnemyDelay;
     [SerializeField] private float _minPowerupDelay, _maxPowerupDelay;
     [SerializeField] private float _xPosition, _yPosition;
     [SerializeField] private float _initialSpawnDelay = 2f;
+    [SerializeField] private WaveManager _waveManager;
 
     private bool _canSpawn = false;
+    private int _currentWave = 0;
+    private int _enemiesToSpawn;
     private WaitForSeconds _wait;
 
     private void Awake()
@@ -27,6 +30,20 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         _wait = new WaitForSeconds(_spawnEnemyDelay);
+        
+        SetWaveEnemies();
+    }
+
+    private void SetWaveEnemies()
+    {
+        if (_waveManager != null)
+        {
+            _enemiesToSpawn = _waveManager.GetWave(_currentWave).enemies;
+        }
+        for (int i = 0; i < _enemyPrefab.Length; i++)
+        {
+            _enemyPrefab[i] = _waveManager.GetWave(_currentWave).enemyTypes[i];
+        }
     }
 
 
@@ -40,23 +57,29 @@ public class SpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     IEnumerator SpawnEnemyRoutine()
     {
-        
-        while (_canSpawn)
+        while (_canSpawn && _enemiesToSpawn > 0)
         {
             // spawn enemy
-            if (_enemyPrefab != null)
+            
+            // Grab random enemy from WaveManager
             {
-                yield return new WaitForSeconds(_initialSpawnDelay);
-                Vector3 spawnPosition =
-                    SpawnLocation(-_xPosition, _xPosition, _yPosition, transform.position.z);
-                GameObject enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity, _enemyContainer.transform);
+                GameObject randomEnemy = _enemyPrefab[Random.Range(0, _waveManager.GetWave(_currentWave).enemyTypes.Length)];
+                if (_enemyPrefab != null)
+                {
+                    yield return new WaitForSeconds(_initialSpawnDelay);
+                    Vector3 spawnPosition =
+                        SpawnLocation(-_xPosition, _xPosition, _yPosition, transform.position.z);
+                    // GameObject enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity, _enemyContainer.transform);
+                    GameObject enemy = Instantiate(randomEnemy, spawnPosition, Quaternion.identity, _enemyContainer.transform);
+                    _enemiesToSpawn--;
+                }
+                yield return _wait;
             }
-            yield return _wait;
+            
         }
     }
 
