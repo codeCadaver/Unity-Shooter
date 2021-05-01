@@ -19,6 +19,7 @@ public class SpawnManager : MonoBehaviour
     private bool _canSpawn = false;
     private int _currentWave = 0;
     private int _enemiesToSpawn;
+    private int _enemiesKilled = 0;
     private WaitForSeconds _wait;
 
     private void Awake()
@@ -61,7 +62,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemyRoutine()
     {
-        while (_canSpawn && _enemiesToSpawn > 0)
+        while (_canSpawn)
         {
             // spawn enemy
             
@@ -100,6 +101,32 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    private void GetRemainingEnemies(int enemyScore)
+    {
+        _enemiesKilled++;
+        Debug.Log($"Enemies Killed: {_enemiesKilled}");
+        if (_enemiesKilled >= _waveManager.GetWave(_currentWave).enemies)
+        {
+            StopSpawning();
+            
+            StartCoroutine(NextWave());
+        }
+    }
+
+    IEnumerator NextWave()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Enemy>().SelfDestruct();
+        }
+
+        yield return new WaitForSeconds(2f);
+        _currentWave++;
+        _enemiesKilled = 0;
+        _canSpawn = true;
+    }
+
     public void StopSpawning()
     {
         _canSpawn = false;
@@ -108,11 +135,13 @@ public class SpawnManager : MonoBehaviour
     private void OnEnable()
     {
         UIManager.OnStartGame += StartSpawning;
+        Enemy.OnEnemyDestroyed += GetRemainingEnemies;
     }
 
     private void OnDisable()
     {
         UIManager.OnStartGame -= StartSpawning;
+        Enemy.OnEnemyDestroyed -= GetRemainingEnemies;
     }
 
     private Vector3 SpawnLocation(float minX, float maxX, float startPositionY, float positionZ)

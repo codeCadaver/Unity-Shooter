@@ -48,9 +48,9 @@ MonoBehaviour:
   - waveID: 0
     enemyTypes:
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
-    - {fileID: 7961499487716443373, guid: bed216b1019696c4bb59da2b039fbb9f, type: 3}
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
-    enemies: 10
+    - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
+    enemies: 5
   - waveID: 1
     enemyTypes:
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}

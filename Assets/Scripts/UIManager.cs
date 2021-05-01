@@ -60,7 +60,6 @@ public class UIManager : MonoBehaviour
     private void UpdateScore(int value)
     {
         _score += value;
-        _scoreText.text = $"Score: {_score}";
     }
 
     public void UpdateCurrentLivesImages(int currentLives)

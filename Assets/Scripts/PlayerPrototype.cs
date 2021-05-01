@@ -39,6 +39,7 @@ public class PlayerPrototype : MonoBehaviour
     private bool _canFire = true;
     private bool _canTakeDamage = true;
     private bool _canTurbo = true;
+    private bool _invertedControls = false;
     private bool _shieldActive = false;
     private Collider2D _collider2D;
     private float _currentSpeed;
@@ -71,18 +72,26 @@ public class PlayerPrototype : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        Movement(_invertedControls);
         DoABarrelRoll(_right);
         GetPlayerRotation();
     }
 
-    private void Movement()
+    private void Movement(bool inverted)
     {
-        _right = Input.GetAxis("Horizontal");
-        _up = Input.GetAxis("Vertical");
+        if (inverted)
+        {
+            _right = -Input.GetAxis("Horizontal");
+            _up = -Input.GetAxis("Vertical");
+        }
+        else
+        {
+            _right = Input.GetAxis("Horizontal");
+            _up = Input.GetAxis("Vertical");
+        }
 
         var movement = new Vector2(_right, _up);
-        
+
         OnPlayerMoved?.Invoke(movement);
         
         _playerTransform.Translate(movement * (Time.deltaTime * _currentSpeed));
@@ -225,6 +234,7 @@ public class PlayerPrototype : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        
         if (other.CompareTag("EnemyLaser"))
         {
             DamagePlayer();
@@ -373,6 +383,13 @@ public class PlayerPrototype : MonoBehaviour
         }
     }
 
+    IEnumerator InvertControlsRoutine()
+    {
+        _invertedControls = true;
+        yield return new WaitForSeconds(_powerUpTime);
+        _invertedControls = false;
+    }
+
     public void SpeedBoost()
     {
         StartCoroutine(SpeedBoostRoutine());
@@ -398,6 +415,11 @@ public class PlayerPrototype : MonoBehaviour
             // repair damage
             ShowDamage();
         }
+    }
+
+    public void InvertControls()
+    {
+        StartCoroutine(InvertControlsRoutine());
     }
     
 }

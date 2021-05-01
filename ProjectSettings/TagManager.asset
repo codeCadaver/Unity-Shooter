@@ -11,6 +11,8 @@ TagManager:
   - Laser
   - EnemyLaser
   - Shield
+  - LaserDetection
+  - LaserRadar
   layers:
   - Default
   - TransparentFX
@@ -27,8 +29,8 @@ TagManager:
   - 
   - Enemy
   - 
-  - 
-  - 
+  - LaserRadar
+  - PlayerLaser
   - 
   - 
   - 

@@ -80,7 +80,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a17d5822244ab6458ee3b2cac197928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canDodge: 0
+  _enemyTypes: 3
   _enemyValue: 10
+  _fireDelay: 2
   _speed: 5
   _screenTopY: 7
   _screenBottomY: -7

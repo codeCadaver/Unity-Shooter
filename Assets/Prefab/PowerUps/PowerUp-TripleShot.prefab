@@ -117,9 +117,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 0
   _speed: 3
+  _speedMultiplier: 1.5
   _bottomScreenPosY: -7
   _playerString: Player2D
   _powerupClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  _explosion: {fileID: 6508013675867252682, guid: 28393d0fe4563db488b66f2bbb2b1447,
+    type: 3}
 --- !u!50 &98454024036077638
 Rigidbody2D:
   serializedVersion: 4

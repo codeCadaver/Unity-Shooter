@@ -12,20 +12,25 @@ public class PowerUp : MonoBehaviour
         SpeedBoost = 1,
         Shield = 2,
         Ammo = 3,
-        Health = 4
+        Health = 4,
+        InvertedControls = 5
     };
 
     [SerializeField] private PowerUpType _type;
     
     [SerializeField] private float _speed = 3f;
+    [SerializeField] private float _speedMultiplier = 3f;
     [SerializeField] private float _bottomScreenPosY = -4f;
     [SerializeField] private string _playerString;
     [SerializeField] private AudioClip _powerupClip;
+    [SerializeField] private GameObject _explosion;
 
     private Animator _animator;
     private AudioSource _audioSource;
     private int collectedHash = Animator.StringToHash("Collected");
     private PlayerPrototype _player;
+    private GameObject player;
+    private bool _chasePlayer = false;
     
     
     // Start is called before the first frame update
@@ -33,6 +38,7 @@ public class PowerUp : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+        player = GameObject.FindWithTag("Player");
     }
 
     // Update is called once per frame
@@ -69,6 +75,9 @@ public class PowerUp : MonoBehaviour
                     case PowerUpType.Health:
                         _player.HealthRestore();
                         break;
+                    case PowerUpType.InvertedControls:
+                        _player.InvertControls();
+                        break;
                         
                     default:
                         break;
@@ -76,6 +85,12 @@ public class PowerUp : MonoBehaviour
                 _animator.SetTrigger(collectedHash);
                 AudioSource.PlayClipAtPoint(_powerupClip, Camera.main.transform.position);
             }
+        }
+
+        if (other.CompareTag("EnemyLaser"))
+        {
+            Instantiate(_explosion, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
         }
     }
 
@@ -85,6 +100,20 @@ public class PowerUp : MonoBehaviour
         if (transform.position.y < _bottomScreenPosY)
         {
             DestroyPowerup();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            _chasePlayer = true;
+            
+            // transform.position =
+                // Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * _speed * _speedMultiplier);
+        }
+
+        if (_chasePlayer)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position,
+                Time.deltaTime * _speed * _speedMultiplier);
         }
     }
 
