@@ -13,7 +13,8 @@ public class PowerUp : MonoBehaviour
         Shield = 2,
         Ammo = 3,
         Health = 4,
-        InvertedControls = 5
+        InvertedControls = 5,
+        HomingMissile = 6
     };
 
     [SerializeField] private PowerUpType _type;
@@ -77,6 +78,9 @@ public class PowerUp : MonoBehaviour
                         break;
                     case PowerUpType.InvertedControls:
                         _player.InvertControls();
+                        break;
+                    case PowerUpType.HomingMissile:
+                        _player.HomingMissile();
                         break;
                         
                     default:

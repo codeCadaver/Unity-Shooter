@@ -22,10 +22,10 @@ public class PlayerPrototype : MonoBehaviour
     [SerializeField] private float _xWrap,_xClamp, _minY, _maxY;
     [SerializeField] private float _cooldownDelay = 0.5f;
     [SerializeField] private float _invincibleLength = 2f;
-    [SerializeField] private GameObject _laser, _tripleShot, _shield, _explosion;
+    [SerializeField] private GameObject _laser, _tripleShot, _homingMissile, _shield, _explosion;
     [SerializeField] private int _lives = 3, _maxLives = 3;
     [SerializeField] private Transform _laserOffset;
-    [SerializeField] private bool _tripleShotActive = false;
+    [SerializeField] private bool _tripleShotActive = false, _missileActive = false;
     [SerializeField] private float _powerUpTime = 5f;
     [SerializeField] private float _speedBoost = 8f;
     [SerializeField] private float _thrusterMultiplier = 2f, _thrusterMaxAmount = 10f;
@@ -146,6 +146,9 @@ public class PlayerPrototype : MonoBehaviour
         if (_tripleShotActive)
         {
             _projectile = _tripleShot;
+        } else if (_missileActive)
+        {
+            _projectile = _homingMissile;
         }
         else
         {
@@ -324,6 +327,18 @@ public class PlayerPrototype : MonoBehaviour
     public void TripleShot()
     {
         StartCoroutine(TripleShotRoutine());
+    }
+
+    private IEnumerator MissileRoutine()
+    {
+        _missileActive = true;
+        yield return new WaitForSeconds(_powerUpTime);
+        _missileActive = false;
+    }
+
+    public void HomingMissile()
+    {
+        StartCoroutine(MissileRoutine());
     }
     
     private IEnumerator SpeedBoostRoutine()

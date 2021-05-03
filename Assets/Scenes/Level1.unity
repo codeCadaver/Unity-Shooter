@@ -592,12 +592,14 @@ MonoBehaviour:
   _invincibleLength: 2
   _laser: {fileID: 5095997836457676905, guid: 515012b2d88d2484092f64e0af6d57ba, type: 3}
   _tripleShot: {fileID: 0}
+  _homingMissile: {fileID: 0}
   _shield: {fileID: 0}
   _explosion: {fileID: 0}
   _lives: 3
   _maxLives: 3
   _laserOffset: {fileID: 2788473796171847998}
   _tripleShotActive: 0
+  _missileActive: 0
   _powerUpTime: 5
   _speedBoost: 8
   _thrusterMultiplier: 1.5
@@ -2283,8 +2285,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: -1
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: 531814191
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!224 &1882500946
 RectTransform:
@@ -2871,6 +2873,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
         type: 3}
+      propertyPath: _laser
+      value: 
+      objectReference: {fileID: 7906890993518719733, guid: ffcbd6153a95a1541affd3b7a9255d93,
+        type: 3}
+    - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
+        type: 3}
       propertyPath: _shield
       value: 
       objectReference: {fileID: 568912385}
@@ -2884,6 +2892,12 @@ PrefabInstance:
       propertyPath: _uiManager
       value: 
       objectReference: {fileID: 1845666343}
+    - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
+        type: 3}
+      propertyPath: _homingMissile
+      value: 
+      objectReference: {fileID: 4586268604471389092, guid: 6749aae95947b244b812ddcfce0b5e77,
+        type: 3}
     - target: {fileID: 2812211562712276169, guid: d056f2e79957a29438e94d73e4952ee3,
         type: 3}
       propertyPath: _thrusterMultiplier
@@ -3092,7 +3106,7 @@ PrefabInstance:
     - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
         type: 3}
       propertyPath: _powerups.Array.size
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
         type: 3}
@@ -3135,6 +3149,18 @@ PrefabInstance:
       propertyPath: _powerups.Array.data[9]
       value: 
       objectReference: {fileID: 5068420140736116864, guid: 3a0f8c10616673a4fbd5d6f968afcbdb,
+        type: 3}
+    - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
+        type: 3}
+      propertyPath: _powerups.Array.data[10]
+      value: 
+      objectReference: {fileID: 5068420140736116864, guid: 3a0f8c10616673a4fbd5d6f968afcbdb,
+        type: 3}
+    - target: {fileID: 8469866985242209309, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
+        type: 3}
+      propertyPath: _powerups.Array.data[11]
+      value: 
+      objectReference: {fileID: 4295903694341336800, guid: 7bd2fc8107215f44c993deb67fdbeaae,
         type: 3}
     - target: {fileID: 8469866985242209310, guid: 0bf1f5d00cced574dbe9c2bd3869d522,
         type: 3}

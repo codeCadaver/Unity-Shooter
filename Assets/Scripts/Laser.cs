@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
+    [SerializeField] private bool _isHeatSeeking = true;
     [SerializeField] private bool _isEnemyLaser = false;
     [SerializeField] private float _speed = 8f;
     [SerializeField] private float _maxY = 9f;
     [SerializeField] private LayerMask _ownerLayer, _friendLayer;
 
+    private GameObject[] _enemies = new GameObject[2];
     private Rigidbody2D _rigidbody2D;
     private float _laserPositionY;
 
@@ -19,9 +21,6 @@ public class Laser : MonoBehaviour
     {
         _laserPositionY = transform.position.y;
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        // Physics.IgnoreLayerCollision(_ownerLayer, _friendLayer);
-        // Physics.IgnoreLayerCollision(_ownerLayer.value, _friendLayer.value);
-        // Physics2D.IgnoreLayerCollision(1 << LayerMask.NameToLayer("Enemy"),1 << LayerMask.NameToLayer("Enemy"));
         EnemyCheck();
     }
 
@@ -32,8 +31,41 @@ public class Laser : MonoBehaviour
         Destroy();
     }
 
+    private void CheckForEnemies()
+    {
+        for (int i = 0; i < _enemies.Length; i++)
+        {
+            if (_enemies[i] == null)
+            {
+                GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+                if (enemy != null)
+                {
+                    _enemies[i] = enemy;
+                    Debug.Log("Enemy Added to array");
+                }
+            }
+        }
+    }
+
     private void Movement()
     {
+        if (_isHeatSeeking)
+        {
+            CheckForEnemies();
+            Debug.Log("Heatseeking active");
+            var target = _enemies[0];
+
+            if (target == null)
+            {
+                target = _enemies[1];
+            }
+            if (target != null)
+            {
+                Debug.Log("Enemies Detected");
+                // var q = Quaternion.LookRotation(target.transform.position - transform.position);
+                // transform.rotation = Quaternion.RotateTowards(transform.rotation, q, _speed * Time.deltaTime);
+            }
+        }
         transform.Translate(Vector3.up * (Time.deltaTime * _speed), Space.Self);
     }
 

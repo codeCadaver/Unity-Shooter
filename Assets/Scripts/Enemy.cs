@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
 {
     public static Action<int> OnEnemyDestroyed;
 
-    [SerializeField] private bool _canDodge = false;
+    [SerializeField] private bool _canDodge = true, _canShootBackwards = true;
     [SerializeField] private int _enemyTypes = 4;
     [SerializeField] private int _enemyValue = 10;
     [SerializeField] private float _fireDelay = 2f, _speed = 5f;
@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
 
     private Animator _animator;
     private AudioSource _audioSource;
-    private bool _canRam = true;
+    private bool _canRam = true, _canFire = true;
     private bool _isDead = false;
     private Collider2D _collider2D;
     private int _deathHash = Animator.StringToHash("ExplosionTrigger");
@@ -29,6 +29,9 @@ public class Enemy : MonoBehaviour
     private PlayerPrototype _player;
     private Rigidbody2D _rigidbody2D;
     private int _movementType = 0;
+    private float _lastFired = 0f;
+
+    public bool wasTarget = false;
     
     // Start is called before the first frame update
     void Start()
@@ -40,7 +43,7 @@ public class Enemy : MonoBehaviour
         
         player = GameObject.FindWithTag("Player");
 
-        StartCoroutine(FireRoutine());
+        // StartCoroutine(FireRoutine());
         
         SetMovementType(_enemyTypes);
     }
@@ -103,15 +106,6 @@ public class Enemy : MonoBehaviour
                 transform.position = newPosition;
             }
         }
-
-        // if (_canDodge)
-        {
-            Vector2 boxStart = new Vector2(_laserOffset.position.x, _laserOffset.position.y - 5f);
-            
-            
-            
-
-        }
     }
 
     private void MoveTowardsPlayer()
@@ -160,15 +154,23 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void RacastTarget(string target)
+    private void RacastTarget()
     {
+        Debug.Log("Enemy::RacastTarget Called");
         RaycastHit2D hit2D = Physics2D.Raycast(_laserOffset.position, Vector2.down);
 
-        if (hit2D != null)
+        // if (hit2D != null)
+        if (hit2D.collider)
         {
-            if (hit2D.collider.CompareTag(target))
+            if (hit2D.collider.CompareTag("Player"))
             {
-                StartCoroutine(FireRoutine());
+                // StartCoroutine(FireRoutine());
+                Fire();
+            }
+
+            if (hit2D.collider.CompareTag("PowerUp"))
+            {
+                Fire();
             }
         }
     }
@@ -201,6 +203,7 @@ public class Enemy : MonoBehaviour
             if (_player != null)
             {
                 _player.DamagePlayer();
+                OnEnemyDestroyed?.Invoke(_enemyValue);
             }
             else
             {
@@ -237,34 +240,42 @@ public class Enemy : MonoBehaviour
 
     private void Fire()
     {
-        // raycast
-            // if hit.collider.compareTag(Player)
+        if (Time.time >= _lastFired)
+        {
             Instantiate(_enemyLaser, _laserOffset.position, Quaternion.identity);
-            // shoot laser
-
+            _lastFired = Time.time + _fireDelay;
+        }
     }
 
     private IEnumerator FireRoutine()
     {
         while (!_isDead)
         {
-            Fire();
-            yield return new WaitForSeconds(_fireDelay);
+            if (_canFire)
+            {
+                _canFire = false;
+                Fire();
+                yield return new WaitForSeconds(_fireDelay);
+                _canFire = true;
+            }
         }
     }
 
     private void Dodge(float amount)
     {
-        // if (_canDodge)
-        Vector2 dodgePosition = transform.position;
-        
-        dodgePosition.x += amount;
-        transform.position = dodgePosition;
+        if (_canDodge)
+        {
+            Vector2 dodgePosition = transform.position;
+            
+            dodgePosition.x += amount;
+            transform.position = dodgePosition;
+        }
     }
 
     private void FixedUpdate()
     {
         RadarDetection();
+        RacastTarget();
     }
 
     private void RadarDetection()
@@ -283,6 +294,7 @@ public class Enemy : MonoBehaviour
                 if (hit.collider.transform.position.x > this.transform.position.x)
                 {
                     dodgeAmount = -dodgeAmount;
+                    _canDodge = true;
                 }
                 Dodge(dodgeAmount);
             }

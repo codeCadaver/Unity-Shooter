@@ -50,7 +50,7 @@ MonoBehaviour:
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
-    enemies: 5
+    enemies: 10
   - waveID: 1
     enemyTypes:
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}

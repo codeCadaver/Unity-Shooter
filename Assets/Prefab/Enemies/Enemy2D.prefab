@@ -84,7 +84,7 @@ MonoBehaviour:
   _enemyTypes: 3
   _enemyValue: 10
   _fireDelay: 2
-  _speed: 5
+  _speed: 4
   _screenTopY: 7
   _screenBottomY: -7
   _randomX: 9
