@@ -80,7 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a17d5822244ab6458ee3b2cac197928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canDodge: 0
+  _canDodge: 1
+  _canShootBackwards: 1
   _enemyTypes: 3
   _enemyValue: 10
   _fireDelay: 2
@@ -92,6 +93,7 @@ MonoBehaviour:
   _enemyLaser: {fileID: 8328454349997475352, guid: bc1a95763f5df68498708db1868f41c1,
     type: 3}
   _laserOffset: {fileID: 1477761354}
+  wasTarget: 0
 --- !u!212 &-4296338580775509146
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -41,7 +41,6 @@ public class Laser : MonoBehaviour
                 if (enemy != null)
                 {
                     _enemies[i] = enemy;
-                    Debug.Log("Enemy Added to array");
                 }
             }
         }
@@ -52,7 +51,6 @@ public class Laser : MonoBehaviour
         if (_isHeatSeeking)
         {
             CheckForEnemies();
-            Debug.Log("Heatseeking active");
             var target = _enemies[0];
 
             if (target == null)
@@ -61,9 +59,7 @@ public class Laser : MonoBehaviour
             }
             if (target != null)
             {
-                Debug.Log("Enemies Detected");
-                // var q = Quaternion.LookRotation(target.transform.position - transform.position);
-                // transform.rotation = Quaternion.RotateTowards(transform.rotation, q, _speed * Time.deltaTime);
+                
             }
         }
         transform.Translate(Vector3.up * (Time.deltaTime * _speed), Space.Self);

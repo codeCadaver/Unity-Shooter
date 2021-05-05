@@ -43,8 +43,6 @@ public class Enemy : MonoBehaviour
         
         player = GameObject.FindWithTag("Player");
 
-        // StartCoroutine(FireRoutine());
-        
         SetMovementType(_enemyTypes);
     }
 
@@ -61,32 +59,35 @@ public class Enemy : MonoBehaviour
 
     private void Movement()
     {
-        if (transform.position.y < player.transform.position.y)
+        if (player != null)
         {
-            _canRam = false;
-            _speed = 5f;
-        }
+            if (transform.position.y < player.transform.position.y)
+            {
+                _canRam = false;
+                _speed = 5f;
+            }
 
-        // move down
-        switch (_movementType)
-        {
-            case 0:
-                RamPlayer();
-                break;
-            case 1: 
-                MoveDown();
-                break;
-            case 2:
-                MoveTowardsPlayer();
-                break;
-            case 3:
-                RamPlayer();
-                break;
-                
-            default:
-                // MoveDown();
-                MoveDown();
-                break;
+            // move down
+            switch (_movementType)
+            {
+                case 0:
+                    RamPlayer();
+                    break;
+                case 1: 
+                    MoveDown();
+                    break;
+                case 2:
+                    MoveTowardsPlayer();
+                    break;
+                case 3:
+                    RamPlayer();
+                    break;
+                    
+                default:
+                    // MoveDown();
+                    MoveDown();
+                    break;
+            }
         }
         
     }
@@ -136,7 +137,6 @@ public class Enemy : MonoBehaviour
     {
         float mainSpeed = _speed;
         MoveDown();
-        Debug.Log("Enemy::RamPlayer Called!");
         RaycastHit2D hit = Physics2D.Raycast(_laserOffset.position, Vector3.down);
 
         if (hit.collider != null)
@@ -146,7 +146,6 @@ public class Enemy : MonoBehaviour
                 _speed = 10;
                 Fire();
             }
-            // StartCoroutine(RamRoutine());
             else
             {
                 _speed = 5f;
@@ -156,7 +155,6 @@ public class Enemy : MonoBehaviour
 
     private void RacastTarget()
     {
-        Debug.Log("Enemy::RacastTarget Called");
         RaycastHit2D hit2D = Physics2D.Raycast(_laserOffset.position, Vector2.down);
 
         // if (hit2D != null)
@@ -164,7 +162,6 @@ public class Enemy : MonoBehaviour
         {
             if (hit2D.collider.CompareTag("Player"))
             {
-                // StartCoroutine(FireRoutine());
                 Fire();
             }
 
@@ -263,14 +260,12 @@ public class Enemy : MonoBehaviour
 
     private void Dodge(float amount)
     {
-        if (_canDodge)
-        {
-            Vector2 dodgePosition = transform.position;
+        Vector2 dodgePosition = transform.position;
             
-            dodgePosition.x += amount;
-            transform.position = dodgePosition;
-        }
+        dodgePosition.x += amount;
+        transform.position = dodgePosition;
     }
+
 
     private void FixedUpdate()
     {
@@ -280,23 +275,25 @@ public class Enemy : MonoBehaviour
 
     private void RadarDetection()
     {
-        float xOffset = 0.5f;
-        Vector2 radarPosition = _laserOffset.position;
-        
-        RaycastHit2D hit = Physics2D.Linecast(new Vector2(radarPosition.x - xOffset, radarPosition.y),
-                                              new Vector2(radarPosition.x + xOffset, radarPosition.y));
-
-        if (hit.collider != null)
+        // if (_canDodge)
         {
-            var dodgeAmount = 1f;
-            if (hit.collider.CompareTag("Laser"))
+            float xOffset = 0.5f;
+            Vector2 radarPosition = _laserOffset.position;
+            
+            RaycastHit2D hit = Physics2D.Linecast(new Vector2(radarPosition.x - xOffset, radarPosition.y),
+                                                  new Vector2(radarPosition.x + xOffset, radarPosition.y));
+
+            if (hit.collider != null)
             {
-                if (hit.collider.transform.position.x > this.transform.position.x)
+                var dodgeAmount = 1f;
+                if (hit.collider.CompareTag("Laser"))
                 {
-                    dodgeAmount = -dodgeAmount;
-                    _canDodge = true;
+                    if (hit.collider.transform.position.x > this.transform.position.x)
+                    {
+                        dodgeAmount = -dodgeAmount;
+                    }
+                    Dodge(dodgeAmount);
                 }
-                Dodge(dodgeAmount);
             }
         }
     }

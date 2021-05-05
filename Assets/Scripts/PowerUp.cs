@@ -28,6 +28,7 @@ public class PowerUp : MonoBehaviour
 
     private Animator _animator;
     private AudioSource _audioSource;
+    private Collider2D _collider2D;
     private int collectedHash = Animator.StringToHash("Collected");
     private PlayerPrototype _player;
     private GameObject player;
@@ -39,6 +40,7 @@ public class PowerUp : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+        _collider2D = GetComponent<Collider2D>();
         player = GameObject.FindWithTag("Player");
     }
 
@@ -87,6 +89,7 @@ public class PowerUp : MonoBehaviour
                         break;
                 }
                 _animator.SetTrigger(collectedHash);
+                _collider2D.enabled = false;
                 AudioSource.PlayClipAtPoint(_powerupClip, Camera.main.transform.position);
             }
         }

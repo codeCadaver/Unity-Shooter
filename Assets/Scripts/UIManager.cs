@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private int _maxLives = 3;
     [SerializeField] private TMP_Text _scoreText;
-    [SerializeField] private TMP_Text _gameOverText, _restartText, _startGameText;
+    [SerializeField] private TMP_Text _gameOverText, _restartText, _startGameText, _currentWaveText;
     [SerializeField] private TMP_Text _noAmmoText;
     [SerializeField] private float _noAmmoTextDisplayTime = 2f;
     [SerializeField] private Image _thrusterImage;
@@ -60,6 +60,7 @@ public class UIManager : MonoBehaviour
     private void UpdateScore(int value)
     {
         _score += value;
+        _scoreText.text = $"Score: {_score}";
     }
 
     public void UpdateCurrentLivesImages(int currentLives)
@@ -110,10 +111,12 @@ public class UIManager : MonoBehaviour
     {
         if (!_gameStarted)
         {
+            Debug.Log("UIManager::StartGame called");
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _gameStarted = true;
                 _startGameText.gameObject.SetActive(false);
+                _currentWaveText.gameObject.SetActive(false);
                 OnStartGame?.Invoke(_gameStarted);
             }
         }
@@ -134,6 +137,7 @@ public class UIManager : MonoBehaviour
     public void ThrusterAmount(float amount)
     {
         _thrusterImage.fillAmount = amount;
+        _thrusterImage.color = Color.Lerp(Color.red, Color.green, amount);
     }
 
     private void SetAmmoUI(int amount)
@@ -207,5 +211,11 @@ public class UIManager : MonoBehaviour
         {
             ammoImage.SetActive(true);
         }
+    }
+
+    public void ShowWaveText(bool active, string wave = "WAVE: 1")
+    {
+        _currentWaveText.gameObject.SetActive(active);
+        _currentWaveText.text = wave;
     }
 }

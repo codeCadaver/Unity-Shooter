@@ -73,7 +73,7 @@ public class PlayerPrototype : MonoBehaviour
     void Update()
     {
         Movement(_invertedControls);
-        DoABarrelRoll(_right);
+        // DoABarrelRoll(_right);
         GetPlayerRotation();
     }
 

@@ -15,6 +15,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float _xPosition, _yPosition;
     [SerializeField] private float _initialSpawnDelay = 2f;
     [SerializeField] private WaveManager _waveManager;
+    [SerializeField] private UIManager _uiManager;
 
     private bool _canSpawn = false;
     private int _currentWave = 0;
@@ -104,12 +105,12 @@ public class SpawnManager : MonoBehaviour
     private void GetRemainingEnemies(int enemyScore)
     {
         _enemiesKilled++;
-        Debug.Log($"Enemies Killed: {_enemiesKilled}");
         if (_enemiesKilled >= _waveManager.GetWave(_currentWave).enemies)
         {
             StopSpawning();
             
             StartCoroutine(NextWave());
+            
         }
     }
 
@@ -120,11 +121,20 @@ public class SpawnManager : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().SelfDestruct();
         }
+        StartSpawning(false);
 
+        // Debug.Break();
+        _uiManager.ShowWaveText(true, $"WAVE: {_currentWave + 2}");
         yield return new WaitForSeconds(2f);
+        _uiManager.ShowWaveText(false);
+        // notification text for wave complete and start next wave
+        
+        // Start Wave
         _currentWave++;
         _enemiesKilled = 0;
         _canSpawn = true;
+        SetWaveEnemies();
+        StartSpawning(_canSpawn);
     }
 
     public void StopSpawning()

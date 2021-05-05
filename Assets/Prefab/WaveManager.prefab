@@ -56,16 +56,16 @@ MonoBehaviour:
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
     - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
-    enemies: 10
+    enemies: 20
   - waveID: 2
     enemyTypes:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    enemies: 0
+    - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
+    - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
+    - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
+    enemies: 50
   - waveID: 3
     enemyTypes:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    enemies: 0
+    - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
+    - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
+    - {fileID: 6025992908128577881, guid: 8860e34c072b21445a10ce8b9429e95e, type: 3}
+    enemies: 100

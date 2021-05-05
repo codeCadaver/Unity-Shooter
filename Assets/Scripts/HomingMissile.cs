@@ -47,6 +47,10 @@ public class HomingMissile : MonoBehaviour
                             _target = _enemies[enemy].transform;
                             _target.GetComponent<Enemy>().wasTarget = true;
                         }
+                        else
+                        {
+                            _target = _enemies[enemy++].transform;
+                        }
                     }
 
                     if (_target == null)
